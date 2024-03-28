@@ -5,13 +5,13 @@ namespace CallForPappersService.Interfaces
 {
     public interface IApplicationRepository
     {
-        Application GetApplication(Guid authorGuid);
-        Application GetCurrentApplication(string userId);
-        ICollection<Application> GetApplicationsByDate(DateTime dateTime);
-        bool ApplicationExists(int appId);
-        bool CreateApplication(Application application);
-        bool SubmitApplicationForReview(Application application);
-        bool UpdateApplication(Guid authorId, Application application);
-        bool DeleteApplication(Application pokemon);
+        ApplicationModel GetApplication(Guid authorGuid);
+        ApplicationModel GetCurrentApplication(Guid authorId);
+        ICollection<ApplicationModel> GetApplicationsByDate(DateTime dateTime);
+        bool ApplicationExists(Guid appId);
+        bool CreateApplication(ApplicationModel application);
+        bool SubmitApplicationForReview(ApplicationModel application);
+        bool UpdateApplication(Guid authorId, ApplicationModel application);
+        bool DeleteApplication(ApplicationModel application);
     }
 }

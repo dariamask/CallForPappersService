@@ -1,6 +1,6 @@
 ﻿namespace CallForPappersService.Dto
 {
-    public class AuthorDto
+    public class CreateAuthorDto
     {
         public Guid Id { get; set; }
     }

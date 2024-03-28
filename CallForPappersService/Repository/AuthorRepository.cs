@@ -1,20 +1,19 @@
 ﻿using CallForPappersService.Data;
 using CallForPappersService.Interfaces;
-using CallForPappersService.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace CallForPappersService.Repository
 {
-    public class ActivityTypeRepository : IActivityTypeRepository
+    public class AuthorRepository : IAuthorRepository
     {
         private readonly DataContext _context;
-        public ActivityTypeRepository (DataContext context)
+        public AuthorRepository(DataContext context)
         {
             _context = context;
         }
-        public ICollection<ActivityTypeModel> Activities()
+        public bool AuthorExists(Guid authorId)
         {
-            throw new NotImplementedException();
+            return false;
         }
     }
 }

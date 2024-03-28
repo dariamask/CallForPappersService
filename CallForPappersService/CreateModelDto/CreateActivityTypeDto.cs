@@ -1,6 +1,6 @@
 ﻿namespace CallForPappersService.Dto
 {
-    public class ActivityTypeDto
+    public class CreateActivityTypeDto
     {
         public int Id { get; set; }
         public string Activity { get; set; }

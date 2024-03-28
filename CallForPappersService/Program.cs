@@ -1,4 +1,6 @@
 using CallForPappersService.Data;
+using CallForPappersService.Interfaces;
+using CallForPappersService.Repository;
 using Microsoft.EntityFrameworkCore;
 
 namespace CallForPappersService
@@ -19,6 +21,9 @@ namespace CallForPappersService
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
+
+            builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
+            builder.Services.AddScoped<IActivityTypeRepository, ActivityTypeRepository>();
 
             var app = builder.Build();
 

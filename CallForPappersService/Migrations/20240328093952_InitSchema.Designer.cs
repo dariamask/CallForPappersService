@@ -24,7 +24,7 @@ namespace CallForPappersService.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("CallForPappersService.Models.Activity", b =>
+            modelBuilder.Entity("CallForPappersService.Models.ActivityType", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -96,7 +96,7 @@ namespace CallForPappersService.Migrations
 
             modelBuilder.Entity("CallForPappersService.Models.Application", b =>
                 {
-                    b.HasOne("CallForPappersService.Models.Activity", "Activity")
+                    b.HasOne("CallForPappersService.Models.ActivityType", "ActivityType")
                         .WithMany()
                         .HasForeignKey("ActivityId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -108,7 +108,7 @@ namespace CallForPappersService.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Activity");
+                    b.Navigation("ActivityType");
 
                     b.Navigation("Author");
                 });

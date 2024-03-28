@@ -9,7 +9,7 @@
         public DateTime CreatedDate { get; set; }
         public string Status { get; set; }
         public Author Author { get; set; }
-        public Activity Activity { get; set; }
+        public ActivityType Activity { get; set; }
 
     }
 }

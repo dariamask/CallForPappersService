@@ -16,12 +16,12 @@ namespace CallForPappersService.Repository
 
         public ICollection<Activity> Activities()
         {
-            throw new NotImplementedException();
+            return _context.Activities.ToList();
         }
 
         public Activity GetActivity(int activityId)
         {
-            throw new NotImplementedException();
+            return _context.Activities.Where(x => x.Id == activityId).FirstOrDefault();
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CallForPappersService.Models
+namespace CallForPappersService.Data.Entities
 {
     public class Application
     {

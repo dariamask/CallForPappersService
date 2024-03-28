@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CallForPappersService.Models
+namespace CallForPappersService.Data.Entities
 {
     public class Author
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        ICollection<ApplicationModel> Applications { get; set; }
+        ICollection<Application> Applications { get; set; }
     }
 }

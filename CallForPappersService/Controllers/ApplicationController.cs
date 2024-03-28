@@ -1,5 +1,6 @@
 ﻿
 using AutoMapper;
+using CallForPappersService.Data.Entities;
 using CallForPappersService.Dto;
 using CallForPappersService.Interfaces;
 using CallForPappersService.Models;

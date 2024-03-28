@@ -1,17 +1,19 @@
-﻿using CallForPappersService.Models;
+﻿using CallForPappersService.Data.Entities;
+using CallForPappersService.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CallForPappersService.Interfaces
 {
     public interface IApplicationRepository
     {
-        ApplicationModel GetApplication(Guid authorGuid);
-        ApplicationModel GetCurrentApplication(Guid authorId);
-        ICollection<ApplicationModel> GetApplicationsByDate(DateTime dateTime);
+        Application GetApplication(Guid authorGuid);
+        Application GetDraftApplication(Guid authorId);
+        ICollection<Application> GetApplicationsByDate(DateTime dateTime);
         bool ApplicationExists(Guid appId);
-        bool CreateApplication(ApplicationModel application);
-        bool SubmitApplicationForReview(ApplicationModel application);
-        bool UpdateApplication(Guid authorId, ApplicationModel application);
-        bool DeleteApplication(ApplicationModel application);
+        bool DraftApplicationExists(Guid authorId);
+        void CreateApplication(Application application);
+        bool SubmitApplicationForReview(Application application);
+        void UpdateApplication(Application application);
+        void DeleteApplication(Application application);
     }
 }

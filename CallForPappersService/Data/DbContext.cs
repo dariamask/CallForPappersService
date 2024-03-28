@@ -1,4 +1,5 @@
-﻿using CallForPappersService.Models;
+﻿using CallForPappersService.Data.Entities;
+using CallForPappersService.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace CallForPappersService.Data

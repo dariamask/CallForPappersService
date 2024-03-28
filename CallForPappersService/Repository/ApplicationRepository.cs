@@ -1,4 +1,5 @@
 ﻿using CallForPappersService.Data;
+using CallForPappersService.Data.Entities;
 using CallForPappersService.Interfaces;
 using CallForPappersService.Models;
 using Microsoft.EntityFrameworkCore;
@@ -12,49 +13,54 @@ namespace CallForPappersService.Repository
         {
             _context = context;
         }
+
         public bool ApplicationExists(Guid appId)
         {
-            throw new NotImplementedException();
+            return _context.Applications.Any(a => a.Id == appId);
         }
 
-        public bool CreateApplication(ApplicationModel application)
+        public void CreateApplication(Application application)
         {
             _context.Add(application);
-            return Save();
+            _context.SaveChanges();
         }
-        public bool Save()
+
+        public bool DraftApplicationExists(Guid authorId)
         {
-            var saved = _context.SaveChanges();
-            return saved > 0 ? true : false;
+            return _context.Applications.Any(a => a.AuthorId == authorId && a.Status == "Unsubmitted");
         }
-        public bool DeleteApplication(ApplicationModel application)
+
+        public void DeleteApplication(Application application)
+        {
+            _context.Remove(application);
+            _context.SaveChanges();
+        }
+
+        public Application GetApplication(Guid authorGuid)
+        {
+            return _context.Applications.Where(a => a.Id == authorGuid).FirstOrDefault();
+
+        }
+
+        public ICollection<Application> GetApplicationsByDate(DateTime dateTime)
+        {
+            return _context.Applications.Where(a => a.CreatedDate >= dateTime).ToList();
+        }
+
+        public Application GetDraftApplication(Guid authorId)
+        {
+            return _context.Applications.Where(a => a.AuthorId == authorId && a.Status == "Unsubmitted").FirstOrDefault();
+        }
+
+        public bool SubmitApplicationForReview(Application application)
         {
             throw new NotImplementedException();
         }
 
-        public ApplicationModel GetApplication(Guid authorGuid)
+        public void UpdateApplication(Application application)
         {
-            throw new NotImplementedException();
-        }
-
-        public ICollection<ApplicationModel> GetApplicationsByDate(DateTime dateTime)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ApplicationModel GetCurrentApplication(Guid authorId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool SubmitApplicationForReview(ApplicationModel application)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool UpdateApplication(Guid authorId, ApplicationModel application)
-        {
-            throw new NotImplementedException();
+            _context.Update(application);
+            _context.SaveChanges();
         }
     }
 }

@@ -22,7 +22,7 @@ namespace CallForPappersService.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("CallForPappersService.Models.ActivityType", b =>
+            modelBuilder.Entity("CallForPappersService.Data.Entities.Activity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -43,7 +43,7 @@ namespace CallForPappersService.Migrations
                     b.ToTable("Activities");
                 });
 
-            modelBuilder.Entity("CallForPappersService.Models.Application", b =>
+            modelBuilder.Entity("CallForPappersService.Data.Entities.Application", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -82,7 +82,7 @@ namespace CallForPappersService.Migrations
                     b.ToTable("Applications");
                 });
 
-            modelBuilder.Entity("CallForPappersService.Models.Author", b =>
+            modelBuilder.Entity("CallForPappersService.Data.Entities.Author", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()

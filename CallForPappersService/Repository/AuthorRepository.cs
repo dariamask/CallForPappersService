@@ -13,7 +13,7 @@ namespace CallForPappersService.Repository
         }
         public bool AuthorExists(Guid authorId)
         {
-            return false;
+            return _context.Authors.Any(a => a.Id == authorId);
         }
     }
 }

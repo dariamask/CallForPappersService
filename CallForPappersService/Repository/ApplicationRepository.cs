@@ -52,11 +52,6 @@ namespace CallForPappersService.Repository
             return _context.Applications.Where(a => a.AuthorId == authorId && a.Status == "Unsubmitted").FirstOrDefault();
         }
 
-        public bool SubmitApplicationForReview(Application application)
-        {
-            throw new NotImplementedException();
-        }
-
         public void UpdateApplication(Application application)
         {
             _context.Update(application);

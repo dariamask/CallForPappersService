@@ -12,7 +12,6 @@ namespace CallForPappersService.Interfaces
         bool ApplicationExists(Guid appId);
         bool DraftApplicationExists(Guid authorId);
         void CreateApplication(Application application);
-        bool SubmitApplicationForReview(Application application);
         void UpdateApplication(Application application);
         void DeleteApplication(Application application);
     }

@@ -31,18 +31,24 @@ namespace CallForPappersService.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var application = new ApplicationModel
+            var application = new Application
             {
                 AuthorId = (Guid)applicationCreate.AuthorId,
                 Name = applicationCreate.Name,
                 Description = applicationCreate.Description,
                 Outline = applicationCreate.Outline,
                 CreatedDate = DateTime.Now,
-                Status = "Unsubmitted", 
-                Activity = applicationCreate.ActvityTypeName,    
+                Status = (Status.Pending).ToString(),
+                Activity = new Activity
+                {
+                    ActivityType = applicationCreate.ActvityTypeName,
+                    Description = "доклад"
+                }
             };
 
-            int x = 5;
+            _applicationRepository.CreateApplication(application);
+
+
             //if (!_applicationRepository.CreateApplication(application))
             //{
             //    ModelState.AddModelError("", "Something went wrong while savin");

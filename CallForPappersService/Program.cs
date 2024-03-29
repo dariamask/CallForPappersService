@@ -2,6 +2,7 @@ using CallForPappersService.Data;
 using CallForPappersService.Interfaces;
 using CallForPappersService.Repository;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 namespace CallForPappersService
 {
@@ -13,7 +14,8 @@ namespace CallForPappersService
 
             // Add services to the container.
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers().AddJsonOptions(x =>
+                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);;
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -21,7 +23,7 @@ namespace CallForPappersService
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
-
+            
             builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
             builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
             builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();

@@ -28,36 +28,21 @@ namespace CallForPappersService.Controllers
             if (applicationCreate == null)
                 return BadRequest(ModelState);
 
-            //var category = _applicationRepository.GetApplications()
-            //    .Where(c => c.Name.Trim().ToUpper() == categoryCreate.Name.TrimEnd().ToUpper())
-            //    .FirstOrDefault();
-
-            //if (category != null)
-            //{
-            //    ModelState.AddModelError("", "Category already exists");
-            //    return StatusCode(422, ModelState);
-            //}
-
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var application = new Application
+            var application = new ApplicationModel
             {
-                AuthorId = applicationCreate.AuthorId,
+                AuthorId = (Guid)applicationCreate.AuthorId,
                 Name = applicationCreate.Name,
                 Description = applicationCreate.Description,
                 Outline = applicationCreate.Outline,
                 CreatedDate = DateTime.Now,
-                Status = "Unsubmitted",
-                ActivityId = 5
+                Status = "Unsubmitted", 
+                Activity = applicationCreate.ActvityTypeName,    
             };
 
-            //author: "ddfea950-d878-4bfe-a5d7-e9771e830cbd",
-            //type: "Report",
-            //name: "Новые фичи C# vNext",
-            //description: "Расскажу что нас ждет в новом релизе!",
-            //outline: "очень много текста... прямо детальный план доклада!",
-
+            int x = 5;
             //if (!_applicationRepository.CreateApplication(application))
             //{
             //    ModelState.AddModelError("", "Something went wrong while savin");

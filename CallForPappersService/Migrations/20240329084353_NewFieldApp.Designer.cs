@@ -4,6 +4,7 @@ using CallForPappersService.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CallForPappersService.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240329084353_NewFieldApp")]
+    partial class NewFieldApp
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -79,8 +81,6 @@ namespace CallForPappersService.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ActivityId");
-
                     b.ToTable("Applications");
                 });
 
@@ -97,17 +97,6 @@ namespace CallForPappersService.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Authors");
-                });
-
-            modelBuilder.Entity("CallForPappersService.Data.Entities.Application", b =>
-                {
-                    b.HasOne("CallForPappersService.Data.Entities.Activity", "Activity")
-                        .WithMany()
-                        .HasForeignKey("ActivityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Activity");
                 });
 #pragma warning restore 612, 618
         }

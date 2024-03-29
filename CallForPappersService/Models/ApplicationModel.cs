@@ -11,6 +11,10 @@ namespace CallForPappersService.Models
         [JsonPropertyName("outline")][Required]public string Outline { get; set; }
         [JsonPropertyName("author")] public Guid AuthorId { get; set; }
         [JsonPropertyName("activity")] public string Activity { get; set; }
+        public int ActivityId { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public string Status { get; set; }
+
     }
 
     public enum Status

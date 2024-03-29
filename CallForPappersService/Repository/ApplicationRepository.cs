@@ -57,5 +57,10 @@ namespace CallForPappersService.Repository
             _context.Update(application);
             _context.SaveChanges();
         }
+
+        public ICollection<Application> GetAll()
+        {
+            return _context.Applications.ToList();
+        }
     }
 }

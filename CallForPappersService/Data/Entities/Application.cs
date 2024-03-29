@@ -19,6 +19,7 @@ namespace CallForPappersService.Data.Entities
         public Guid AuthorId { get; set; }
         [Required]
         public int ActivityId { get; set; }
+        public Activity Activity { get; set; }
 
     }
 }

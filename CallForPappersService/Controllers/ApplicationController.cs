@@ -20,6 +20,34 @@ namespace CallForPappersService.Controllers
             _applicationRepository = applicationRepository;
         }
 
+        [HttpGet("{applicationId}")]
+        [ProducesResponseType(200)]
+        public IActionResult GetApplicationByAuthorId(Guid applicationId)
+        {
+            var applications = _applicationRepository.GetApplication(applicationId);
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            return Ok(applications);
+        }
+
+        [HttpGet]
+        [Route("/applications/{submittedAfter}")]
+        public IActionResult GetSumbittetApplicationsByDate(DateTime submittedAfter)
+        {
+            var applications = _applicationRepository.GetApplicationsByDate(submittedAfter);
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            return Ok(applications);
+        }
+
         [HttpPost]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
@@ -38,13 +66,15 @@ namespace CallForPappersService.Controllers
                 Description = applicationCreate.Description,
                 Outline = applicationCreate.Outline,
                 CreatedDate = DateTime.Now,
-                Status = (Status.Pending).ToString(),
+                //Status = (Status.Pending).ToString(),
                 Activity = new Activity
                 {
-                    ActivityType = applicationCreate.ActvityTypeName,
+                    //ActivityType = applicationCreate.ActvityTypeName,
                     Description = "доклад"
                 }
             };
+
+            int x = 5;
 
             _applicationRepository.CreateApplication(application);
 

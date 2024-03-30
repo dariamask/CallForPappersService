@@ -27,7 +27,7 @@ namespace CallForPappersService.Repository
 
         public bool DraftApplicationExists(Guid authorId)
         {
-            return _context.Applications.Any(a => a.AuthorId == authorId && a.Status == "Unsubmitted");
+            return _context.Applications.Any(a => a.AuthorId == authorId);
         }
 
         public void DeleteApplication(Application application)
@@ -36,9 +36,9 @@ namespace CallForPappersService.Repository
             _context.SaveChanges();
         }
 
-        public Application GetApplication(Guid authorGuid)
+        public Application GetApplication(Guid applicationId)
         {
-            return _context.Applications.Where(a => a.Id == authorGuid).FirstOrDefault();
+            return _context.Applications.Where(a => a.Id == applicationId).FirstOrDefault();
 
         }
 
@@ -49,7 +49,7 @@ namespace CallForPappersService.Repository
 
         public Application GetDraftApplication(Guid authorId)
         {
-            return _context.Applications.Where(a => a.AuthorId == authorId && a.Status == "Unsubmitted").FirstOrDefault();
+            return _context.Applications.Where(a => a.AuthorId == authorId).FirstOrDefault();
         }
 
         public void UpdateApplication(Application application)

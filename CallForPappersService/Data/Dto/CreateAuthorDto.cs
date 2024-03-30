@@ -1,4 +1,4 @@
-﻿namespace CallForPappersService.Dto
+﻿namespace CallForPappersService.Data.Dto
 {
     public class CreateAuthorDto
     {

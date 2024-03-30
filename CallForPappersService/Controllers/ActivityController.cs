@@ -31,15 +31,15 @@ namespace CallForPappersService.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var activity = new Activity
-            {
-                Id = activityCreate.Id,
-                ActivityType = activityCreate.ActivityType,
-                Description = activityCreate.Description,
-            };
+            //var activity = new Activity
+            //{
+            //    Id = activityCreate.Id,
+            //    ActivityType = activityCreate.ActivityType,
+            //    Description = activityCreate.Description,
+            //};
 
-            _context.Add(activity);
-            _context.SaveChanges();
+            //_context.Add(activity);
+            //_context.SaveChanges();
 
             //author: "ddfea950-d878-4bfe-a5d7-e9771e830cbd",
             //type: "Report",

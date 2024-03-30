@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CallForPappersService.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240329084353_NewFieldApp")]
-    partial class NewFieldApp
+    [Migration("20240329202353_InitMigration_version150")]
+    partial class InitMigration_version150
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -26,15 +26,12 @@ namespace CallForPappersService.Migrations
 
             modelBuilder.Entity("CallForPappersService.Data.Entities.Activity", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("ActivityType")
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("ActivityType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -53,6 +50,9 @@ namespace CallForPappersService.Migrations
 
                     b.Property<int>("ActivityId")
                         .HasColumnType("int");
+
+                    b.Property<Guid>("ActivityId1")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("AuthorId")
                         .HasColumnType("uniqueidentifier");
@@ -75,11 +75,12 @@ namespace CallForPappersService.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ActivityId1");
 
                     b.ToTable("Applications");
                 });
@@ -97,6 +98,17 @@ namespace CallForPappersService.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Authors");
+                });
+
+            modelBuilder.Entity("CallForPappersService.Data.Entities.Application", b =>
+                {
+                    b.HasOne("CallForPappersService.Data.Entities.Activity", "Activity")
+                        .WithMany()
+                        .HasForeignKey("ActivityId1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Activity");
                 });
 #pragma warning restore 612, 618
         }

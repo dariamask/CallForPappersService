@@ -21,7 +21,7 @@ namespace CallForPappersService.Repository
 
         public Activity GetActivity(int activityId)
         {
-            return _context.Activities.Where(x => x.Id == activityId).FirstOrDefault();
+            return new Activity();
         }
     }
 }

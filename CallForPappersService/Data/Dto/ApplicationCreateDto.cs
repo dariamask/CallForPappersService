@@ -18,6 +18,6 @@ namespace CallForPappersService.Data.Dto
         public ActivityType ActvityTypeName { get; set; }
 
         [JsonPropertyName("author")]
-        public Guid AuthorId { get; set; }
+        public Guid AuthorId { get; set; }        
     }
 }

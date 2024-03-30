@@ -30,7 +30,7 @@ namespace CallForPappersService.Services
                 Description = dto.Description!,
                 Outline = dto.Outline!,
                 CreatedDate = DateTime.Now,
-                Status = ApplicationStatus.Active,
+                Status = ApplicationStatus.Pending,
                 ActivityId = _activityRepository.GetActivity(dto.ActvityTypeName).Id,
             };
 
@@ -38,7 +38,7 @@ namespace CallForPappersService.Services
 
             return new ApplicationDto()
             {
-                Id = Guid.NewGuid(),
+                Id = application.Id,
                 AuthorId = application.AuthorId,
                 ActvityTypeName = application.Activity.ActivityType,              
                 Name = application.Name!,
@@ -51,8 +51,6 @@ namespace CallForPappersService.Services
         {
             var application = _applicationRepository.GetApplication(applicationId);
 
-            
-
              return new ApplicationDto()
             {
                 Id = application.Id,
@@ -64,9 +62,51 @@ namespace CallForPappersService.Services
             };
         }
 
-        public Task<List<ApplicationDto>> GetUsubmittedApplicationOlderDateAsync(DateTime unsubmittedOlder)
+        public async Task<List<ApplicationDto>> GetUnsubmittedApplicationOlderDateAsync(DateTime? unsubmittedOlder)
         {
-            var applications = _applicationRepository.GetUnsubmittedApplicationOlderDate(unsubmittedOlder);
+            var applications = await _applicationRepository.GetUnsubmittedApplicationOlderDateAsync(unsubmittedOlder);
+
+            var dtos = new List<ApplicationDto>();
+
+            foreach (var app in applications)
+            {
+                var dto = new ApplicationDto()
+                {
+                    Id = app.Id,
+                    AuthorId = app.AuthorId,
+                    ActvityTypeName = app.Activity.ActivityType,
+                    Name = app.Name!,
+                    Description = app.Description!,
+                    Outline = app.Outline!,
+                };
+                dtos.Add(dto);
+            }
+
+            return dtos;
+
+        }
+
+        public async Task<List<ApplicationDto>> GetApplicationsSubmittedAfterDateAsync(DateTime? submittedAfter)
+        {
+            var applications = await _applicationRepository.GetApplicationsSubmittedAfterDateAsync(submittedAfter);
+
+            var dtos = new List<ApplicationDto>();
+
+            foreach (var app in applications)
+            {
+                var dto = new ApplicationDto()
+                {
+                    Id = app.Id,
+                    AuthorId = app.AuthorId,
+                    ActvityTypeName = app.Activity.ActivityType,
+                    Name = app.Name!,
+                    Description = app.Description!,
+                    Outline = app.Outline!,
+                };
+                dtos.Add(dto);
+            }
+
+            return dtos;
         }
     }
 }

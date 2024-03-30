@@ -7,6 +7,7 @@ namespace CallForPappersService.Services
     {
         public Task<ApplicationDto> CreateApplicationAsync(ApplicationCreateDto dto, CancellationToken cancellationToken);
         public Task<ApplicationDto> GetApplicationAsync(Guid applicationId);
-        public Task<List<ApplicationDto>> GetUsubmittedApplicationOlderDateAsync(DateTime unsubmittedOlder);
+        public Task<List<ApplicationDto>> GetUnsubmittedApplicationOlderDateAsync(DateTime? unsubmittedOlder);
+        public Task<List<ApplicationDto>> GetApplicationsSubmittedAfterDateAsync(DateTime? submittedAfter);
     }
 }

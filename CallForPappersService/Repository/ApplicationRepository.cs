@@ -65,9 +65,20 @@ namespace CallForPappersService.Repository
             return _context.Applications.ToList();
         }
 
-        public List<Application> GetUnsubmittedApplicationOlderDate(DateTime unsubmittedOlder)
+        public async Task<List<Application>> GetUnsubmittedApplicationOlderDateAsync(DateTime? unsubmittedOlder)
         {
-            return _context.Applications.Where(a => a.CreatedDate < unsubmittedOlder && a.Status == ApplicationStatus.Pending).ToList();
+            return _context.Applications
+                .Where(a => a.CreatedDate > unsubmittedOlder && a.Status == ApplicationStatus.Pending)
+                .Include(a => a.Activity)
+                .ToList();
+        }
+
+        public async Task<List<Application>> GetApplicationsSubmittedAfterDateAsync(DateTime? submittedAfter)
+        {
+            return _context.Applications
+                .Where(a => a.CreatedDate > submittedAfter && a.Status == ApplicationStatus.Active)
+                .Include(a => a.Activity)
+                .ToList();
         }
     }
 }

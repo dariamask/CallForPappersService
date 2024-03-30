@@ -7,11 +7,13 @@ namespace CallForPappersService.Services
     public class ApplicationService : IApplicationService
     {
         private readonly IApplicationRepository _applicationRepository;
+        private readonly IActivityRepository _activityRepository;
         private readonly ILogger<ApplicationService> _logger;
 
-        public ApplicationService(IApplicationRepository applicationRepository, ILogger<ApplicationService> logger)
+        public ApplicationService(IApplicationRepository applicationRepository, IActivityRepository activityRepository, ILogger<ApplicationService> logger)
         {
             _applicationRepository = applicationRepository;
+            _activityRepository = activityRepository;
             _logger = logger;
         }
         public async Task<ApplicationDto> CreateApplicationAsync(ApplicationCreateDto dto, CancellationToken cancellationToken)
@@ -19,14 +21,6 @@ namespace CallForPappersService.Services
             ArgumentNullException.ThrowIfNull(dto);
 
             // проверить createDto
-
-            var activity = new Activity
-            {
-                Id = new Guid(),
-                Description = "",
-            };
-
-
 
             var application = new Application
             {
@@ -36,12 +30,7 @@ namespace CallForPappersService.Services
                 Outline = dto.Outline!,
                 CreatedDate = DateTime.Now,
                 Status = ApplicationStatus.Pending,
-                Activity = new Activity
-                {
-                    
-                }
-                //Enum.TryParse(dto.ActvityTypeName, out ActivityType Activity),
-
+                ActivityId = _activityRepository.GetActivity(dto.ActvityTypeName).Id,
             };
 
             _applicationRepository.CreateApplication(application);
@@ -50,7 +39,7 @@ namespace CallForPappersService.Services
             {
                 Id = Guid.NewGuid(),
                 AuthorId = application.AuthorId,
-                ActvityTypeName = application.Activity.ActivityType.ToString(),                
+                ActvityTypeName = application.Activity.ActivityType,              
                 Name = application.Name!,
                 Description = application.Description!,
                 Outline = application.Outline!,

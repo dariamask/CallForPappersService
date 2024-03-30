@@ -1,6 +1,5 @@
 ﻿using CallForPappersService.Data;
 using CallForPappersService.Data.Entities;
-using CallForPappersService.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace CallForPappersService.Repository

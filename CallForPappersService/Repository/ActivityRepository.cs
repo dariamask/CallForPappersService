@@ -1,7 +1,5 @@
 ﻿using CallForPappersService.Data;
 using CallForPappersService.Data.Entities;
-
-using CallForPappersService.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace CallForPappersService.Repository
@@ -19,9 +17,15 @@ namespace CallForPappersService.Repository
             return _context.Activities.ToList();
         }
 
-        public Activity GetActivity(int activityId)
+        public Activity GetActivity(Guid activityId)
         {
-            return new Activity();
+            return _context.Activities.Where(a => a.Id == activityId).FirstOrDefault();
+        }
+
+        public Activity GetActivity(ActivityType activityTypeName)
+        {
+            
+            return _context.Activities.Where(a => a.ActivityType == activityTypeName).FirstOrDefault();
         }
     }
 }

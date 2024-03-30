@@ -5,7 +5,7 @@ namespace CallForPappersService.Repository
     public interface IActivityRepository
     {
         ICollection<Activity> Activities();
-        Activity GetActivity(int activityId);
-
+        Activity GetActivity(Guid activityId);
+        Activity GetActivity(ActivityType activityTypeName);
     }
 }

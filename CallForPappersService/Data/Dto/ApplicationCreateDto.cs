@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using CallForPappersService.Data.Entities;
+using System.Text.Json.Serialization;
 
 namespace CallForPappersService.Data.Dto
 {
@@ -14,7 +15,7 @@ namespace CallForPappersService.Data.Dto
         public string? Outline { get; set; }
 
         [JsonPropertyName("activity")]
-        public string? ActvityTypeName { get; set; }
+        public ActivityType ActvityTypeName { get; set; }
 
         [JsonPropertyName("author")]
         public Guid AuthorId { get; set; }

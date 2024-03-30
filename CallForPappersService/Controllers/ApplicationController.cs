@@ -1,11 +1,6 @@
-﻿
-using AutoMapper;
-using CallForPappersService.Data.Entities;
-using CallForPappersService.Data.Dto;
+﻿using CallForPappersService.Data.Dto;
 using CallForPappersService.Interfaces;
-using CallForPappersService.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
 using CallForPappersService.Services;
 
 namespace CallForPappersService.Controllers
@@ -14,11 +9,10 @@ namespace CallForPappersService.Controllers
     [ApiController]
     public class ApplicationController : Controller
     {
-        private readonly IApplicationRepository _applicationRepository;
-        private readonly IAuthorRepository _authorRepository;       
-        public ApplicationController(IApplicationRepository applicationRepository)
+        private readonly IApplicationService _applicationService;    
+        public ApplicationController(IApplicationService applicationService)
         {
-            _applicationRepository = applicationRepository;
+            _applicationService = applicationService;
         }
 
         [HttpPost("applications")]
@@ -26,7 +20,7 @@ namespace CallForPappersService.Controllers
         [ProducesResponseType(400)]
         public async Task<ActionResult<ApplicationDto>> Create([FromBody] ApplicationCreateDto applicationCreateDto, CancellationToken cancellationToken = default)
         {
-            return await IApplicationService.CreateApplicationAsync(applicationCreateDto, cancellationToken);
+            return await _applicationService.CreateApplicationAsync(applicationCreateDto, cancellationToken);
         }
 
 

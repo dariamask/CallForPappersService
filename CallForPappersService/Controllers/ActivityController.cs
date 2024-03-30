@@ -1,6 +1,6 @@
 ﻿using CallForPappersService.Data;
 using CallForPappersService.Data.Entities;
-using CallForPappersService.Dto;
+using CallForPappersService.Data.Dto;
 using CallForPappersService.Interfaces;
 using CallForPappersService.Models;
 using Microsoft.AspNetCore.Mvc;

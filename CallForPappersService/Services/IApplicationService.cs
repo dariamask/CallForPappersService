@@ -2,7 +2,7 @@
 
 namespace CallForPappersService.Services
 {
-    public interface IApplicationServices
+    public interface IApplicationService
     {
         public Task<ApplicationDto> CreateApplicationAsync(ApplicationCreateDto dto, CancellationToken cancellationToken);
     }

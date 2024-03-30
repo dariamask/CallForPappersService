@@ -1,4 +1,5 @@
-﻿using CallForPappersService.Data.Entities;
+﻿using CallForPappersService.Data.Dto;
+using CallForPappersService.Data.Entities;
 
 namespace CallForPappersService.Repository
 {
@@ -15,5 +16,6 @@ namespace CallForPappersService.Repository
         void DeleteApplication(Application application);
         Task<List<Application>> GetUnsubmittedApplicationOlderDateAsync(DateTime? unsubmittedOlder);
         Task<List<Application>> GetApplicationsSubmittedAfterDateAsync(DateTime? submittedAfter);
+        Application GetUnsubmittedApplication(Guid applicationId);
     }
 }

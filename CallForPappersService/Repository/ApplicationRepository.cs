@@ -1,4 +1,5 @@
 ﻿using CallForPappersService.Data;
+using CallForPappersService.Data.Dto;
 using CallForPappersService.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -79,6 +80,15 @@ namespace CallForPappersService.Repository
                 .Where(a => a.CreatedDate > submittedAfter && a.Status == ApplicationStatus.Active)
                 .Include(a => a.Activity)
                 .ToList();
+        }
+        public Application GetUnsubmittedApplication(Guid applicationId)
+        {
+            var app = _context.Applications
+                .Where(a => a.Id == applicationId && a.Status == ApplicationStatus.Pending)
+                .Include(a => a.Activity)
+                .FirstOrDefault();
+
+            return app;
         }
     }
 }

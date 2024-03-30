@@ -108,5 +108,27 @@ namespace CallForPappersService.Services
 
             return dtos;
         }
+
+        public async Task<ApplicationDto> GetUnsubmittedApplication(Guid applicationId)
+        {
+            var application = _applicationRepository.GetUnsubmittedApplication(applicationId);
+
+            if (application == null)
+            {
+                return null;
+            }
+            else
+            {
+                return new ApplicationDto()
+                {
+                    Id = application.Id,
+                    AuthorId = application.AuthorId,
+                    ActvityTypeName = application.Activity.ActivityType,
+                    Name = application.Name!,
+                    Description = application.Description!,
+                    Outline = application.Outline!,
+                };
+            }
+        }
     }
 }

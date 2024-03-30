@@ -40,7 +40,7 @@ namespace CallForPappersService.Repository
                 .Where(a => a.Id == applicationId)
                 .Include(a => a.Activity)
                 .FirstOrDefault();
-            int x = 5;
+
             return app;
         }
 
@@ -65,5 +65,9 @@ namespace CallForPappersService.Repository
             return _context.Applications.ToList();
         }
 
+        public List<Application> GetUnsubmittedApplicationOlderDate(DateTime unsubmittedOlder)
+        {
+            return _context.Applications.Where(a => a.CreatedDate < unsubmittedOlder && a.Status == ApplicationStatus.Pending).ToList();
+        }
     }
 }

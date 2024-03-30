@@ -63,5 +63,10 @@ namespace CallForPappersService.Services
                 Outline = application.Outline!,
             };
         }
+
+        public Task<List<ApplicationDto>> GetUsubmittedApplicationOlderDateAsync(DateTime unsubmittedOlder)
+        {
+            var applications = _applicationRepository.GetUnsubmittedApplicationOlderDate(unsubmittedOlder);
+        }
     }
 }

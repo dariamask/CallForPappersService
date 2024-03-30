@@ -30,5 +30,12 @@ namespace CallForPappersService.Controllers
             return await _applicationService.GetApplicationAsync(applicationId);
         }
 
+        [HttpGet("{applications}")]
+        [ProducesResponseType(200)]
+        public async Task<ActionResult<List<ApplicationDto>>> GetApplication(DateTime unsubmittedOlder)
+        {
+            return await _applicationService.GetUsubmittedApplicationOlderDateAsync(unsubmittedOlder);
+        }
+
     }
 }

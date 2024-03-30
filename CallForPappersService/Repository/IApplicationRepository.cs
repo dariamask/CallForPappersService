@@ -13,5 +13,6 @@ namespace CallForPappersService.Repository
         void CreateApplication(Application application);
         void UpdateApplication(Application application);
         void DeleteApplication(Application application);
+        List<Application> GetUnsubmittedApplicationOlderDate(DateTime unsubmittedOlder);
     }
 }

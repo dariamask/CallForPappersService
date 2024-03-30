@@ -1,9 +1,9 @@
 ﻿using CallForPappersService.Data.Dto;
 using CallForPappersService.Data.Entities;
 
-namespace CallForPappersService.Service
+namespace CallForPappersService.Services
 {
-    public class ApplicationService : IApplicationService
+    public class ApplicationServices : IApplicationServices
     {
         public Task<ApplicationDto> CreateApplicationAsync(ApplicationCreateDto dto, CancellationToken cancellationToken)
         {
@@ -19,7 +19,7 @@ namespace CallForPappersService.Service
                 Status = ApplicationStatus.Pending
             };
 
-
+           
         }
     }
 }

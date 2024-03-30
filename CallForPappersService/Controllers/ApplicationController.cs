@@ -6,6 +6,7 @@ using CallForPappersService.Interfaces;
 using CallForPappersService.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
+using CallForPappersService.Services;
 
 namespace CallForPappersService.Controllers
 {
@@ -25,7 +26,7 @@ namespace CallForPappersService.Controllers
         [ProducesResponseType(400)]
         public async Task<ActionResult<ApplicationDto>> Create([FromBody] ApplicationCreateDto applicationCreateDto, CancellationToken cancellationToken = default)
         {
-            return await _applicationService.CreateApplicationAsync(applicationCreateDto, cancellationToken);
+            return await IApplicationService.CreateApplicationAsync(applicationCreateDto, cancellationToken);
         }
 
 

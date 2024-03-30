@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CallForPappersService.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240329202353_InitMigration_version150")]
-    partial class InitMigration_version150
+    [Migration("20240330093009_InitSchema")]
+    partial class InitSchema
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -48,10 +48,7 @@ namespace CallForPappersService.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("ActivityId")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("ActivityId1")
+                    b.Property<Guid>("ActivityId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("AuthorId")
@@ -80,7 +77,7 @@ namespace CallForPappersService.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ActivityId1");
+                    b.HasIndex("ActivityId");
 
                     b.ToTable("Applications");
                 });
@@ -91,10 +88,6 @@ namespace CallForPappersService.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.ToTable("Authors");
@@ -104,7 +97,7 @@ namespace CallForPappersService.Migrations
                 {
                     b.HasOne("CallForPappersService.Data.Entities.Activity", "Activity")
                         .WithMany()
-                        .HasForeignKey("ActivityId1")
+                        .HasForeignKey("ActivityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

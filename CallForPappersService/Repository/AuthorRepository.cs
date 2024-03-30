@@ -1,5 +1,4 @@
 ﻿using CallForPappersService.Data;
-using CallForPappersService.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace CallForPappersService.Repository

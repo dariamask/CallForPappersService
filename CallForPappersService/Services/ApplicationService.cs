@@ -1,6 +1,5 @@
 ﻿using CallForPappersService.Data.Dto;
 using CallForPappersService.Data.Entities;
-using CallForPappersService.Interfaces;
 using CallForPappersService.Repository;
 
 namespace CallForPappersService.Services
@@ -21,6 +20,14 @@ namespace CallForPappersService.Services
 
             // проверить createDto
 
+            var activity = new Activity
+            {
+                Id = new Guid(),
+                Description = "",
+            };
+
+
+
             var application = new Application
             {
                 AuthorId = dto.AuthorId,
@@ -28,14 +35,22 @@ namespace CallForPappersService.Services
                 Description = dto.Description!,
                 Outline = dto.Outline!,
                 CreatedDate = DateTime.Now,
-                Status = ApplicationStatus.Pending
+                Status = ApplicationStatus.Pending,
+                Activity = new Activity
+                {
+                    
+                }
+                //Enum.TryParse(dto.ActvityTypeName, out ActivityType Activity),
+
             };
+
+            _applicationRepository.CreateApplication(application);
 
             return new ApplicationDto()
             {
-                Id = new Guid(),
+                Id = Guid.NewGuid(),
                 AuthorId = application.AuthorId,
-                ActvityTypeName = application.Activity.ActivityType.ToString(),
+                ActvityTypeName = application.Activity.ActivityType.ToString(),                
                 Name = application.Name!,
                 Description = application.Description!,
                 Outline = application.Outline!,

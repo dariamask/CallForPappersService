@@ -1,8 +1,6 @@
 ﻿using CallForPappersService.Data.Entities;
-using CallForPappersService.Models;
-using Microsoft.AspNetCore.Mvc;
 
-namespace CallForPappersService.Interfaces
+namespace CallForPappersService.Repository
 {
     public interface IApplicationRepository
     {

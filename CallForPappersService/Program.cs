@@ -1,6 +1,7 @@
 using CallForPappersService.Data;
-using CallForPappersService.Interfaces;
+
 using CallForPappersService.Repository;
+using CallForPappersService.Services;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 
@@ -16,7 +17,7 @@ namespace CallForPappersService
 
             builder.Services.AddControllers().AddJsonOptions(x =>
                 x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);;
-
+            builder.Services.AddTransient<Seed>();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbContext<DataContext>(options =>
@@ -28,7 +29,24 @@ namespace CallForPappersService
             builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
             builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
 
+            builder.Services.AddScoped<IApplicationService, ApplicationService>();
+
             var app = builder.Build();
+
+            if (args.Length == 1 && args[0].ToLower() == "seeddata")
+            {
+                SeedData(app);
+            }
+            void SeedData(IHost app)
+            {
+                var scopedFactory = app.Services.GetService<IServiceScopeFactory>();
+
+                using (var scope = scopedFactory.CreateScope())
+                {
+                    var service = scope.ServiceProvider.GetService<Seed>();
+                    service.SeedDataContext();
+                }
+            }
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -46,5 +64,6 @@ namespace CallForPappersService
 
             app.Run();
         }
+
     }
 }

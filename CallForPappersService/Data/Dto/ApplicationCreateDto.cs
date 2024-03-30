@@ -13,7 +13,7 @@ namespace CallForPappersService.Data.Dto
         [JsonPropertyName("outline")]
         public string? Outline { get; set; }
 
-        [JsonPropertyName("type")]
+        [JsonPropertyName("activity")]
         public string? ActvityTypeName { get; set; }
 
         [JsonPropertyName("author")]

@@ -1,4 +1,4 @@
-﻿namespace CallForPappersService.Interfaces
+﻿namespace CallForPappersService.Repository
 {
     public interface IAuthorRepository
     {

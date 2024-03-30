@@ -1,12 +1,11 @@
 ﻿using CallForPappersService.Data.Entities;
-using CallForPappersService.Models;
 
-namespace CallForPappersService.Interfaces
+namespace CallForPappersService.Repository
 {
     public interface IActivityRepository
     {
         ICollection<Activity> Activities();
-        Activity GetActivity (int activityId);
+        Activity GetActivity(int activityId);
 
     }
 }

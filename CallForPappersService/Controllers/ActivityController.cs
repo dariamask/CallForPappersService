@@ -1,10 +1,10 @@
 ﻿using CallForPappersService.Data;
 using CallForPappersService.Data.Entities;
 using CallForPappersService.Data.Dto;
-using CallForPappersService.Interfaces;
 using CallForPappersService.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using CallForPappersService.Repository;
 
 namespace CallForPappersService.Controllers
 {

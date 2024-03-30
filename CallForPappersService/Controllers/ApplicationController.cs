@@ -1,6 +1,7 @@
 ﻿using CallForPappersService.Data.Dto;
 using Microsoft.AspNetCore.Mvc;
 using CallForPappersService.Services;
+using System.Threading;
 
 namespace CallForPappersService.Controllers
 {
@@ -22,7 +23,12 @@ namespace CallForPappersService.Controllers
             return await _applicationService.CreateApplicationAsync(applicationCreateDto, cancellationToken);
         }
 
-
+        [HttpGet("{applicationId}")]
+        [ProducesResponseType(200)]
+        public async Task<ActionResult<ApplicationDto>> GetApplication(Guid applicationId)
+        {
+            return await _applicationService.GetApplicationAsync(applicationId);
+        }
 
     }
 }

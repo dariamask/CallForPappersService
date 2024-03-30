@@ -16,7 +16,9 @@ namespace CallForPappersService
             // Add services to the container.
 
             builder.Services.AddControllers().AddJsonOptions(x =>
-                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);;
+                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+            builder.Services.AddControllers().AddJsonOptions(x =>
+            x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
             builder.Services.AddTransient<Seed>();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();

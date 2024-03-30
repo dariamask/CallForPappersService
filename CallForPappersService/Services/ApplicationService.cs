@@ -1,6 +1,7 @@
 ﻿using CallForPappersService.Data.Dto;
 using CallForPappersService.Data.Entities;
 using CallForPappersService.Repository;
+using Microsoft.AspNetCore.DataProtection.KeyManagement.Internal;
 
 namespace CallForPappersService.Services
 {
@@ -29,7 +30,7 @@ namespace CallForPappersService.Services
                 Description = dto.Description!,
                 Outline = dto.Outline!,
                 CreatedDate = DateTime.Now,
-                Status = ApplicationStatus.Pending,
+                Status = ApplicationStatus.Active,
                 ActivityId = _activityRepository.GetActivity(dto.ActvityTypeName).Id,
             };
 
@@ -40,6 +41,23 @@ namespace CallForPappersService.Services
                 Id = Guid.NewGuid(),
                 AuthorId = application.AuthorId,
                 ActvityTypeName = application.Activity.ActivityType,              
+                Name = application.Name!,
+                Description = application.Description!,
+                Outline = application.Outline!,
+            };
+        }
+
+        public async Task<ApplicationDto> GetApplicationAsync(Guid applicationId)
+        {
+            var application = _applicationRepository.GetApplication(applicationId);
+
+            
+
+             return new ApplicationDto()
+            {
+                Id = application.Id,
+                AuthorId = application.AuthorId,
+                ActvityTypeName = application.Activity.ActivityType,
                 Name = application.Name!,
                 Description = application.Description!,
                 Outline = application.Outline!,

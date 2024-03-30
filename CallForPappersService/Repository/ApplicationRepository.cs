@@ -36,8 +36,12 @@ namespace CallForPappersService.Repository
 
         public Application GetApplication(Guid applicationId)
         {
-            return _context.Applications.Where(a => a.Id == applicationId).FirstOrDefault();
-
+            var app = _context.Applications            
+                .Where(a => a.Id == applicationId)
+                .Include(a => a.Activity)
+                .FirstOrDefault();
+            int x = 5;
+            return app;
         }
 
         public ICollection<Application> GetApplicationsByDate(DateTime dateTime)
@@ -60,5 +64,6 @@ namespace CallForPappersService.Repository
         {
             return _context.Applications.ToList();
         }
+
     }
 }

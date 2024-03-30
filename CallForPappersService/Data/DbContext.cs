@@ -1,5 +1,6 @@
 ﻿using CallForPappersService.Data.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata;
 
 namespace CallForPappersService.Data
 {
@@ -13,6 +14,7 @@ namespace CallForPappersService.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Application>().HasIndex(a => a.AuthorId);
         }
     }
 }

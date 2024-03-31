@@ -12,5 +12,6 @@ namespace CallForPappersService.Services
         public Task<ApplicationDto> GetUnsubmittedApplication(Guid applicationId);
         public Task<ApplicationDto> UpdateApplication(Guid applicationId, ApplicationDto updatedApplication);
         public Task SubmitApplication(Guid applicationId);
+        public Task DeleteAplication(Guid applicationId);
     }
 }

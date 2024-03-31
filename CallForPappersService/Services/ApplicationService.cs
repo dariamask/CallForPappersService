@@ -16,6 +16,7 @@ namespace CallForPappersService.Services
             _activityRepository = activityRepository;
             _logger = logger;
         }
+       
         public async Task<ApplicationDto> CreateApplicationAsync(ApplicationCreateDto dto, CancellationToken cancellationToken)
         {
             ArgumentNullException.ThrowIfNull(dto);
@@ -129,6 +130,7 @@ namespace CallForPappersService.Services
                 };
             }
         }
+
         public async Task<ApplicationDto> UpdateApplication(Guid applicationId, ApplicationDto updatedApplication)
         {
             if (applicationId == null || updatedApplication == null)
@@ -156,6 +158,7 @@ namespace CallForPappersService.Services
                 Outline = currentApplication.Outline!,
             };
         }
+
         public async Task SubmitApplication(Guid applicationId)
         {
             var application = _applicationRepository.GetApplication(applicationId);
@@ -163,6 +166,13 @@ namespace CallForPappersService.Services
             application.Status = ApplicationStatus.Active;
 
             _applicationRepository.UpdateApplication(application);
+        }
+
+        public async Task DeleteAplication(Guid applicationId)
+        {
+            var application = _applicationRepository.GetApplication(applicationId);
+
+            _applicationRepository.DeleteApplication(application);
         }
     }
 }

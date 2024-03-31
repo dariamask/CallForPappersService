@@ -84,5 +84,15 @@ namespace CallForPappersService.Controllers
             return Ok();
         }
 
+        [HttpDelete("{applicationId}")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public async Task<ActionResult> DeleteApplication(Guid applicationId)
+        {
+            await _applicationService.DeleteAplication(applicationId);
+
+            return Ok();           
+        }
     }
 }

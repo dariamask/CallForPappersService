@@ -81,6 +81,7 @@ namespace CallForPappersService.Repository
                 .Include(a => a.Activity)
                 .ToList();
         }
+
         public Application GetUnsubmittedApplication(Guid applicationId)
         {
             var app = _context.Applications

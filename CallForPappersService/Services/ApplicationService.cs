@@ -30,7 +30,7 @@ namespace CallForPappersService.Services
                 Outline = dto.Outline!,
                 CreatedDate = DateTime.Now,
                 Status = ApplicationStatus.Pending,
-                ActivityId = _activityRepository.GetActivity(dto.ActvityTypeName).Id,
+                ActivityId = _activityRepository.GetActivityId(dto.ActvityTypeName),             
             };
 
             _applicationRepository.CreateApplication(application);
@@ -131,12 +131,30 @@ namespace CallForPappersService.Services
         }
         public async Task<ApplicationDto> UpdateApplication(Guid applicationId, ApplicationDto updatedApplication)
         {
-            if (applicationId == null || updatedApplication == null || applicationId != updatedApplication.Id)
+            if (applicationId == null || updatedApplication == null)
             {
                 return null;
             }
 
-            return null;
+            var currentApplication = _applicationRepository.GetApplication(applicationId);
+
+            currentApplication.Name = updatedApplication.Name!;
+            currentApplication.Description = updatedApplication.Description!;
+            currentApplication.Outline = updatedApplication.Outline!;
+            currentApplication.ActivityId = _activityRepository.GetActivityId(updatedApplication.ActvityTypeName);
+            
+
+           _applicationRepository.UpdateApplication(currentApplication);
+
+            return new ApplicationDto
+            {
+                Id = currentApplication.Id,
+                AuthorId = currentApplication.AuthorId,
+                ActvityTypeName = currentApplication.Activity.ActivityType,
+                Name = currentApplication.Name!,
+                Description = currentApplication.Description!,
+                Outline = currentApplication.Outline!,
+            };
         }
         public async Task SubmitApplication(Guid applicationId)
         {

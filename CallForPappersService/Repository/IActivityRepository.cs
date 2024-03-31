@@ -6,5 +6,6 @@ namespace CallForPappersService.Repository
     {
         Task<ICollection<Activity>> GetActivitiesAsync();
         Activity GetActivity(ActivityType activityType);
+        Guid GetActivityId(ActivityType activityType);
     }
 }

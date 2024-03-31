@@ -59,7 +59,7 @@ namespace CallForPappersService.Repository
         public async Task<List<Application>> GetApplicationsSubmittedAfterDateAsync(DateTime? submittedAfter)
         {
             return await _context.Applications
-                .Where(a => a.CreatedDate > submittedAfter && a.Status == ApplicationStatus.Active)
+                .Where(a => a.SubmitDate < submittedAfter && a.Status == ApplicationStatus.Active)
                 .Include(a => a.Activity)
                 .ToListAsync();
         }

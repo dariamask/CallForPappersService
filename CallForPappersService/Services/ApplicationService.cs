@@ -32,6 +32,7 @@ namespace CallForPappersService.Services
                 Description = dto.Description!,
                 Outline = dto.Outline!,
                 CreatedDate = DateTime.Now,
+                SubmitDate = null,
                 Status = ApplicationStatus.Pending,
                 ActivityId = _activityRepository.GetActivityId(dto.ActvityTypeName),             
             };

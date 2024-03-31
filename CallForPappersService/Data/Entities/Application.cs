@@ -14,6 +14,7 @@ namespace CallForPappersService.Data.Entities
         [MaxLength(1000)]
         public string Outline { get; set; }
         public DateTime CreatedDate { get; set; }
+        public DateTime? SubmitDate { get; set; }
         public ApplicationStatus Status { get; set; }
         [Required]
         public Guid AuthorId { get; set; }

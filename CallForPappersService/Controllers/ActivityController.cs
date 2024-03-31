@@ -4,6 +4,7 @@ using CallForPappersService.Data.Dto;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CallForPappersService.Repository;
+using CallForPappersService.Services;
 
 namespace CallForPappersService.Controllers
 {
@@ -11,21 +12,17 @@ namespace CallForPappersService.Controllers
     [ApiController]
     public class ActivityController : Controller
     {
-        private readonly IActivityRepository _activityRepository;
-        private readonly DataContext _context;
-        public ActivityController(IActivityRepository activityRepository, DataContext context)
+        private readonly IActivityService _activityService;
+        public ActivityController(IActivityService activityService)
         {
-            _activityRepository = activityRepository;
-            _context = context;
+            _activityService = activityService;
         }
 
-        [HttpPost("activities")]
-        [ProducesResponseType(204)]
-        [ProducesResponseType(400)]
-        public async Task<ActionResult<ActivityDto>> Create([FromBody] ApplicationCreateDto applicationCreateDto, CancellationToken cancellationToken = default)
+        [HttpGet]
+        [ProducesResponseType(200)]
+        public async Task<ActionResult<List<ActivityDto>>> GetActivitiesAsync()
         {
-            return await _applicationService.CreateApplicationAsync(applicationCreateDto, cancellationToken);
+            return await _activityService.GetActivitiesAsync();
         }
-
     }
 }

@@ -12,20 +12,14 @@ namespace CallForPappersService.Repository
             _context = context;
         }
 
-        public ICollection<Activity> Activities()
+        public async Task<ICollection<Activity>> GetActivitiesAsync()
         {
             return _context.Activities.ToList();
         }
 
-        public Activity GetActivity(Guid activityId)
+        public Activity GetActivity(ActivityType activityType)
         {
-            return _context.Activities.Where(a => a.Id == activityId).FirstOrDefault();
-        }
-
-        public Activity GetActivity(ActivityType activityTypeName)
-        {
-            
-            return _context.Activities.Where(a => a.ActivityType == activityTypeName).FirstOrDefault();
+            return _context.Activities.Where(a => a.ActivityType == activityType).FirstOrDefault();
         }
     }
 }

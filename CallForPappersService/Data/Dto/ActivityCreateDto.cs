@@ -1,13 +1,14 @@
-﻿using System.Text.Json.Serialization;
+﻿using CallForPappersService.Data.Entities;
+using System.Text.Json.Serialization;
 
 namespace CallForPappersService.Data.Dto
 {
     public class ActivityCreateDto
     {
         [JsonPropertyName("activity")]
-        public string? ActivityType { get; set; }
+        public ActivityType ActivityType { get; set; }
 
         [JsonPropertyName("description")]
-        public string? Description { get; set; }
+        public string Description { get; set; }
     }
 }

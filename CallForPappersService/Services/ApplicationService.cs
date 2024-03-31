@@ -21,6 +21,11 @@ namespace CallForPappersService.Services
         {
             ArgumentNullException.ThrowIfNull(dto);
 
+            if (_applicationRepository.DraftApplicationExists(dto.AuthorId))
+            {
+
+            }
+
             // проверить createDto
 
             var application = new Application
@@ -66,47 +71,30 @@ namespace CallForPappersService.Services
         {
             var applications = await _applicationRepository.GetUnsubmittedApplicationOlderDateAsync(unsubmittedOlder);
 
-            var dtos = new List<ApplicationDto>();
-
-            foreach (var app in applications)
+            return applications.Select(x => new ApplicationDto
             {
-                var dto = new ApplicationDto()
-                {
-                    Id = app.Id,
-                    AuthorId = app.AuthorId,
-                    ActvityTypeName = app.Activity.ActivityType,
-                    Name = app.Name!,
-                    Description = app.Description!,
-                    Outline = app.Outline!,
-                };
-                dtos.Add(dto);
-            }
-
-            return dtos;
-
+                Id = x.Id,
+                AuthorId = x.AuthorId,
+                ActvityTypeName = x.Activity.ActivityType,
+                Name = x.Name!,
+                Description = x.Description!,
+                Outline = x.Outline!,
+            }).ToList();
         }
 
         public async Task<List<ApplicationDto>> GetApplicationsSubmittedAfterDateAsync(DateTime? submittedAfter)
         {
             var applications = await _applicationRepository.GetApplicationsSubmittedAfterDateAsync(submittedAfter);
 
-            var dtos = new List<ApplicationDto>();
-
-            foreach (var app in applications)
+            return applications.Select(x => new ApplicationDto
             {
-                var dto = new ApplicationDto()
-                {
-                    Id = app.Id,
-                    AuthorId = app.AuthorId,
-                    ActvityTypeName = app.Activity.ActivityType,
-                    Name = app.Name!,
-                    Description = app.Description!,
-                    Outline = app.Outline!,
-                };
-                dtos.Add(dto);
-            }
-
-            return dtos;
+                Id = x.Id,
+                AuthorId = x.AuthorId,
+                ActvityTypeName = x.Activity.ActivityType,
+                Name = x.Name!,
+                Description = x.Description!,
+                Outline = x.Outline!,
+            }).ToList();
         }
 
         public async Task<ApplicationDto> GetUnsubmittedApplication(Guid applicationId)

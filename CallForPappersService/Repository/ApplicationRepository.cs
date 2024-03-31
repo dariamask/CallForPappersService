@@ -26,7 +26,7 @@ namespace CallForPappersService.Repository
 
         public bool DraftApplicationExists(Guid authorId)
         {
-            return _context.Applications.Any(a => a.AuthorId == authorId);
+            return _context.Applications.Any(a => a.AuthorId == authorId && a.Status == ApplicationStatus.Pending);
         }
 
         public void DeleteApplication(Application application)

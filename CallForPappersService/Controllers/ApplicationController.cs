@@ -15,12 +15,13 @@ namespace CallForPappersService.Controllers
             _applicationService = applicationService;
         }
 
-        [HttpPost("applications")]
-        [ProducesResponseType(204)]
+        [HttpPost]
+        [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         public async Task<ActionResult<ApplicationDto>> Create([FromBody] ApplicationCreateDto applicationCreateDto, CancellationToken cancellationToken = default)
         {
-            return await _applicationService.CreateApplicationAsync(applicationCreateDto, cancellationToken);
+            var application = await _applicationService.CreateApplicationAsync(applicationCreateDto, cancellationToken);
+            return application == null ? BadRequest("Something went wrong") : Ok(application);
         }
 
 
@@ -67,11 +68,12 @@ namespace CallForPappersService.Controllers
 
         [HttpPut("{applicationId}")]
         [ProducesResponseType(400)]
-        [ProducesResponseType(204)]
+        [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         public async Task<ActionResult<ApplicationDto>> UpdateApplication(Guid applicationId, [FromBody] ApplicationUpdateDto updatedApplication)
-        {
-            return await _applicationService.UpdateApplicationAsync(applicationId, updatedApplication);
+        {            
+            var application = await _applicationService.UpdateApplicationAsync(applicationId, updatedApplication);
+            return application == null ? BadRequest("Something went wrong") : Ok(application);
         }
 
         [HttpPost("{applicationId}/submit")]
@@ -79,9 +81,8 @@ namespace CallForPappersService.Controllers
         [ProducesResponseType(400)]
         public async Task<ActionResult> SubmitApplication(Guid applicationId)
         {
-            await _applicationService.SubmitApplicationAsync(applicationId);
-
-            return Ok();
+            var result = await _applicationService.SubmitApplicationAsync(applicationId);
+            return result ? Ok("Success") : BadRequest("Something went wrong with submitting");
         }
 
         [HttpDelete("{applicationId}")]
@@ -90,9 +91,8 @@ namespace CallForPappersService.Controllers
         [ProducesResponseType(404)]
         public async Task<ActionResult> DeleteApplication(Guid applicationId)
         {
-            await _applicationService.DeleteAplicationAsync(applicationId);
-
-            return Ok();           
+            var result = await _applicationService.DeleteAplicationAsync(applicationId);
+            return result ? Ok("Success") : BadRequest("Something went wrong");         
         }
     }
 }

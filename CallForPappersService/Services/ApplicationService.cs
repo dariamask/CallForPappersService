@@ -20,14 +20,13 @@ namespace CallForPappersService.Services
         public async Task<ApplicationDto> CreateApplicationAsync(ApplicationCreateDto dto, CancellationToken cancellationToken)
         {
             ArgumentNullException.ThrowIfNull(dto);
-
-            //if (_applicationRepository.DraftApplicationExistsAsync(dto.AuthorId))
-
-            // проверить createDto
+            
+            if (dto == null) return null;
+            if (await _applicationRepository.DraftApplicationExistsAsync(dto.AuthorId)) return null;
 
             var application = new Application
             {
-                AuthorId = dto.AuthorId,
+                AuthorId = dto.AuthorId!,
                 Name = dto.Name!,
                 Description = dto.Description!,
                 Outline = dto.Outline!,
@@ -37,7 +36,7 @@ namespace CallForPappersService.Services
                 ActivityId = _activityRepository.GetActivityId(dto.ActvityTypeName),             
             };
 
-            await _applicationRepository.CreateApplicationAsync(application);
+            if (!await _applicationRepository.CreateApplicationAsync(application)) return null;
 
             return new ApplicationDto()
             {
@@ -119,19 +118,20 @@ namespace CallForPappersService.Services
 
         public async Task<ApplicationDto> UpdateApplicationAsync(Guid applicationId, ApplicationUpdateDto updatedApplication)
         {
-            if (applicationId == null || updatedApplication == null)
-            {
-                return null;
-            }
+            
+            if (updatedApplication == null) return null;
+            if (!await _applicationRepository.ApplicationExistsAsync(applicationId)) return null;
 
             var currentApplication = await _applicationRepository.GetApplicationAsync(applicationId);
+
+            if (currentApplication.Status == ApplicationStatus.Active) return null;
 
             currentApplication.Name = updatedApplication.Name!;
             currentApplication.Description = updatedApplication.Description!;
             currentApplication.Outline = updatedApplication.Outline!;
             currentApplication.ActivityId = _activityRepository.GetActivityId(updatedApplication.ActvityTypeName);
 
-            await _applicationRepository.UpdateApplicationAsync(currentApplication);
+            if (!await _applicationRepository.UpdateApplicationAsync(currentApplication)) return null;
 
             return new ApplicationDto
             {
@@ -144,20 +144,26 @@ namespace CallForPappersService.Services
             };
         }
 
-        public async Task SubmitApplicationAsync(Guid applicationId)
+        public async Task<bool> SubmitApplicationAsync(Guid applicationId)
         {
+            if (!await _applicationRepository.ApplicationExistsAsync(applicationId)) return false;
+
             var application = await _applicationRepository.GetApplicationAsync(applicationId);
 
             application.Status = ApplicationStatus.Active;
 
-            await _applicationRepository.UpdateApplicationAsync(application);
+            return await _applicationRepository.UpdateApplicationAsync(application);
         }
 
-        public async Task DeleteAplicationAsync(Guid applicationId)
+        public async Task<bool> DeleteAplicationAsync(Guid applicationId)
         {
+            if (!await _applicationRepository.ApplicationExistsAsync(applicationId)) return false;
+
             var application = await _applicationRepository.GetApplicationAsync(applicationId);
 
-            await _applicationRepository.DeleteApplicationAsync(application);
+            if (application.Status == ApplicationStatus.Active) return false;
+
+            return await _applicationRepository.DeleteApplicationAsync(application);
         }
     }
 }

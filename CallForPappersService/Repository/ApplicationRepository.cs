@@ -18,21 +18,30 @@ namespace CallForPappersService.Repository
             return await _context.Applications.AnyAsync(a => a.Id == appId);
         }
 
-        public async Task CreateApplicationAsync(Application application)
+        public async Task<bool> CreateApplicationAsync(Application application)
         {
             _context.Add(application);
-            await _context.SaveChangesAsync();
+            return await Save();
+        }
+
+        public async Task<bool> ApplicationExistsAsync(Guid applicationId)
+        {
+            return await _context.Applications.AnyAsync(a => a.Id == applicationId);
         }
 
         public async Task<bool> DraftApplicationExistsAsync(Guid authorId)
         {
             return await _context.Applications.AnyAsync(a => a.AuthorId == authorId && a.Status == ApplicationStatus.Pending);
         }
-
-        public async Task DeleteApplicationAsync(Application application)
+        public async Task<bool> Save()
+        {
+            var saved = await _context.SaveChangesAsync();
+            return saved > 0 ? true : false;
+        }
+        public async Task<bool> DeleteApplicationAsync(Application application)
         {
             _context.Remove(application);
-            await _context.SaveChangesAsync();
+            return await Save();
         }
 
         public async Task<Application> GetApplicationAsync(Guid applicationId)
@@ -42,10 +51,10 @@ namespace CallForPappersService.Repository
                 .FirstOrDefaultAsync();
         }
 
-        public async Task UpdateApplicationAsync(Application application)
+        public async Task<bool> UpdateApplicationAsync(Application application)
         {
             _context.Update(application);
-            await _context.SaveChangesAsync();
+            return await Save();
         }
 
         public async Task<List<Application>> GetUnsubmittedApplicationOlderDateAsync(DateTime? unsubmittedOlder)

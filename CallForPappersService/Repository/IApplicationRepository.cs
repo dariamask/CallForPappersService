@@ -7,9 +7,10 @@ namespace CallForPappersService.Repository
     {
         Task<Application> GetApplicationAsync(Guid applicationId);
         Task<bool> DraftApplicationExistsAsync(Guid authorId);
-        Task CreateApplicationAsync(Application application);
-        Task UpdateApplicationAsync(Application application);
-        Task DeleteApplicationAsync(Application application);
+        Task<bool> ApplicationExistsAsync(Guid applicationId);
+        Task<bool> CreateApplicationAsync(Application application);
+        Task<bool> UpdateApplicationAsync(Application application);
+        Task<bool> DeleteApplicationAsync(Application application);
         Task<List<Application>> GetUnsubmittedApplicationOlderDateAsync(DateTime? unsubmittedOlder);
         Task<List<Application>> GetApplicationsSubmittedAfterDateAsync(DateTime? submittedAfter);
         Task<Application> GetUnsubmittedApplicationAsync(Guid applicationId);

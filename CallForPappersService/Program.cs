@@ -32,6 +32,8 @@ namespace CallForPappersService
             builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
 
             builder.Services.AddScoped<IApplicationService, ApplicationService>();
+            builder.Services.AddScoped<IActivityService, ActivityService>();
+
 
             var app = builder.Build();
 

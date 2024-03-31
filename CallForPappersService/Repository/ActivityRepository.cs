@@ -14,7 +14,7 @@ namespace CallForPappersService.Repository
 
         public async Task<ICollection<Activity>> GetActivitiesAsync()
         {
-            return _context.Activities.ToList();
+            return await _context.Activities.ToListAsync();
         }
 
         public Activity GetActivity(ActivityType activityType)

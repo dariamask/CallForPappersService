@@ -19,40 +19,13 @@ namespace CallForPappersService.Controllers
             _context = context;
         }
 
-        [HttpPost]
+        [HttpPost("activities")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public IActionResult CreateActivity([FromBody] CreateActivityDto activityCreate)
+        public async Task<ActionResult<ActivityDto>> Create([FromBody] ApplicationCreateDto applicationCreateDto, CancellationToken cancellationToken = default)
         {
-            if (activityCreate == null)
-                return BadRequest(ModelState);
-
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            //var activity = new Activity
-            //{
-            //    Id = activityCreate.Id,
-            //    ActivityType = activityCreate.ActivityType,
-            //    Description = activityCreate.Description,
-            //};
-
-            //_context.Add(activity);
-            //_context.SaveChanges();
-
-            //author: "ddfea950-d878-4bfe-a5d7-e9771e830cbd",
-            //type: "Report",
-            //name: "Новые фичи C# vNext",
-            //description: "Расскажу что нас ждет в новом релизе!",
-            //outline: "очень много текста... прямо детальный план доклада!",
-
-            //if (!_applicationRepository.CreateApplication(application))
-            //{
-            //    ModelState.AddModelError("", "Something went wrong while savin");
-            //    return StatusCode(500, ModelState);
-            //}
-
-            return Ok("Successfully created");
+            return await _applicationService.CreateApplicationAsync(applicationCreateDto, cancellationToken);
         }
+
     }
 }

@@ -6,7 +6,7 @@ namespace CallForPappersService.Data.Entities
     {
         public Guid Id { get; set; }
         public ActivityType ActivityType { get; set; }
-         public string Description { get; set; }
+        public string Description { get; set; }
     }
 
     public enum ActivityType

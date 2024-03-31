@@ -1,7 +1,6 @@
 ﻿using CallForPappersService.Data.Dto;
 using CallForPappersService.Data.Entities;
 using CallForPappersService.Repository;
-using Microsoft.AspNetCore.DataProtection.KeyManagement.Internal;
 
 namespace CallForPappersService.Services
 {
@@ -129,6 +128,15 @@ namespace CallForPappersService.Services
                     Outline = application.Outline!,
                 };
             }
+        }
+        public async Task<ApplicationDto> UpdateApplication(Guid applicationId, ApplicationDto updatedApplication)
+        {
+            if (applicationId == null || updatedApplication == null || applicationId != updatedApplication.Id)
+            {
+                return null;
+            }
+
+            return null;
         }
     }
 }

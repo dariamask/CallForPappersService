@@ -65,5 +65,14 @@ namespace CallForPappersService.Controllers
             return Ok(dto);
         }
 
+        [HttpPut("{applicationId}")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public async Task<ActionResult<ApplicationDto>> UpdateApplication([FromQuery] Guid applicationId, [FromBody] ApplicationDto updatedApplication)
+        {
+            return await _applicationService.UpdateApplication(applicationId, updatedApplication);
+        }
+
     }
 }

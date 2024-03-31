@@ -5,17 +5,13 @@ namespace CallForPappersService.Repository
 {
     public interface IApplicationRepository
     {
-        ICollection<Application> GetAll();
-        Application GetApplication(Guid applicationId);
-        Application GetDraftApplication(Guid authorId);
-        ICollection<Application> GetApplicationsByDate(DateTime dateTime);
-        bool ApplicationExists(Guid appId);
-        bool DraftApplicationExists(Guid authorId);
-        void CreateApplication(Application application);
-        void UpdateApplication(Application application);
-        void DeleteApplication(Application application);
+        Task<Application> GetApplicationAsync(Guid applicationId);
+        Task<bool> DraftApplicationExistsAsync(Guid authorId);
+        Task CreateApplicationAsync(Application application);
+        Task UpdateApplicationAsync(Application application);
+        Task DeleteApplicationAsync(Application application);
         Task<List<Application>> GetUnsubmittedApplicationOlderDateAsync(DateTime? unsubmittedOlder);
         Task<List<Application>> GetApplicationsSubmittedAfterDateAsync(DateTime? submittedAfter);
-        Application GetUnsubmittedApplication(Guid applicationId);
+        Task<Application> GetUnsubmittedApplicationAsync(Guid applicationId);
     }
 }

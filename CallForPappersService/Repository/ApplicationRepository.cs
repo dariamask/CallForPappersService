@@ -13,81 +13,63 @@ namespace CallForPappersService.Repository
             _context = context;
         }
 
-        public bool ApplicationExists(Guid appId)
+        public async Task<bool> ApplicationExists(Guid appId)
         {
-            return _context.Applications.Any(a => a.Id == appId);
+            return await _context.Applications.AnyAsync(a => a.Id == appId);
         }
 
-        public void CreateApplication(Application application)
+        public async Task CreateApplicationAsync(Application application)
         {
             _context.Add(application);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public bool DraftApplicationExists(Guid authorId)
+        public async Task<bool> DraftApplicationExistsAsync(Guid authorId)
         {
-            return _context.Applications.Any(a => a.AuthorId == authorId && a.Status == ApplicationStatus.Pending);
+            return await _context.Applications.AnyAsync(a => a.AuthorId == authorId && a.Status == ApplicationStatus.Pending);
         }
 
-        public void DeleteApplication(Application application)
+        public async Task DeleteApplicationAsync(Application application)
         {
             _context.Remove(application);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public Application GetApplication(Guid applicationId)
+        public async Task<Application> GetApplicationAsync(Guid applicationId)
         {
-            var app = _context.Applications            
+            return await _context.Applications
                 .Where(a => a.Id == applicationId)
-                .Include(a => a.Activity)
-                .FirstOrDefault();
-
-            return app;
+                .FirstOrDefaultAsync();
         }
 
-        public ICollection<Application> GetApplicationsByDate(DateTime dateTime)
-        {
-            return _context.Applications.Where(a => a.CreatedDate >= dateTime).ToList();
-        }
-
-        public Application GetDraftApplication(Guid authorId)
-        {
-            return _context.Applications.Where(a => a.AuthorId == authorId).FirstOrDefault();
-        }
-
-        public void UpdateApplication(Application application)
+        public async Task UpdateApplicationAsync(Application application)
         {
             _context.Update(application);
-            _context.SaveChanges();
-        }
-
-        public ICollection<Application> GetAll()
-        {
-            return _context.Applications.ToList();
+            await _context.SaveChangesAsync();
         }
 
         public async Task<List<Application>> GetUnsubmittedApplicationOlderDateAsync(DateTime? unsubmittedOlder)
         {
-            return _context.Applications
+            return await _context.Applications
                 .Where(a => a.CreatedDate > unsubmittedOlder && a.Status == ApplicationStatus.Pending)
                 .Include(a => a.Activity)
-                .ToList();
+                .ToListAsync();
         }
 
         public async Task<List<Application>> GetApplicationsSubmittedAfterDateAsync(DateTime? submittedAfter)
         {
-            return _context.Applications
+            return await _context.Applications
                 .Where(a => a.CreatedDate > submittedAfter && a.Status == ApplicationStatus.Active)
                 .Include(a => a.Activity)
-                .ToList();
+                .ToListAsync();
         }
 
-        public Application GetUnsubmittedApplication(Guid applicationId)
+        public async Task<Application> GetUnsubmittedApplicationAsync(Guid applicationId)
         {
-            var app = _context.Applications
+            var app = await _context.Applications
                 .Where(a => a.Id == applicationId && a.Status == ApplicationStatus.Pending)
                 .Include(a => a.Activity)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             return app;
         }

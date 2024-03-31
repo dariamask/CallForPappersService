@@ -55,7 +55,7 @@ namespace CallForPappersService.Controllers
         [ProducesResponseType(200)]
         public async Task<ActionResult<ApplicationDto>> GetUnsubmittedApplication(Guid applicationId)
         {          
-            var dto = await _applicationService.GetUnsubmittedApplication(applicationId);
+            var dto = await _applicationService.GetUnsubmittedApplicationAsync(applicationId);
 
             if (dto == null)
             {
@@ -71,7 +71,7 @@ namespace CallForPappersService.Controllers
         [ProducesResponseType(404)]
         public async Task<ActionResult<ApplicationDto>> UpdateApplication(Guid applicationId, [FromBody] ApplicationDto updatedApplication)
         {
-            return await _applicationService.UpdateApplication(applicationId, updatedApplication);
+            return await _applicationService.UpdateApplicationAsync(applicationId, updatedApplication);
         }
 
         [HttpPost("{applicationId}/submit")]
@@ -79,7 +79,7 @@ namespace CallForPappersService.Controllers
         [ProducesResponseType(400)]
         public async Task<ActionResult> SubmitApplication(Guid applicationId)
         {
-            await _applicationService.SubmitApplication(applicationId);
+            await _applicationService.SubmitApplicationAsync(applicationId);
 
             return Ok();
         }
@@ -90,7 +90,7 @@ namespace CallForPappersService.Controllers
         [ProducesResponseType(404)]
         public async Task<ActionResult> DeleteApplication(Guid applicationId)
         {
-            await _applicationService.DeleteAplication(applicationId);
+            await _applicationService.DeleteAplicationAsync(applicationId);
 
             return Ok();           
         }

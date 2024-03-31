@@ -21,10 +21,7 @@ namespace CallForPappersService.Services
         {
             ArgumentNullException.ThrowIfNull(dto);
 
-            if (_applicationRepository.DraftApplicationExists(dto.AuthorId))
-            {
-
-            }
+            //if (_applicationRepository.DraftApplicationExistsAsync(dto.AuthorId))
 
             // проверить createDto
 
@@ -39,7 +36,7 @@ namespace CallForPappersService.Services
                 ActivityId = _activityRepository.GetActivityId(dto.ActvityTypeName),             
             };
 
-            _applicationRepository.CreateApplication(application);
+            await _applicationRepository.CreateApplicationAsync(application);
 
             return new ApplicationDto()
             {
@@ -54,9 +51,9 @@ namespace CallForPappersService.Services
 
         public async Task<ApplicationDto> GetApplicationAsync(Guid applicationId)
         {
-            var application = _applicationRepository.GetApplication(applicationId);
+            var application = await _applicationRepository.GetApplicationAsync(applicationId);
 
-             return new ApplicationDto()
+            return new ApplicationDto()
             {
                 Id = application.Id,
                 AuthorId = application.AuthorId,
@@ -97,9 +94,9 @@ namespace CallForPappersService.Services
             }).ToList();
         }
 
-        public async Task<ApplicationDto> GetUnsubmittedApplication(Guid applicationId)
+        public async Task<ApplicationDto> GetUnsubmittedApplicationAsync(Guid applicationId)
         {
-            var application = _applicationRepository.GetUnsubmittedApplication(applicationId);
+            var application = await _applicationRepository.GetUnsubmittedApplicationAsync(applicationId);
 
             if (application == null)
             {
@@ -119,22 +116,21 @@ namespace CallForPappersService.Services
             }
         }
 
-        public async Task<ApplicationDto> UpdateApplication(Guid applicationId, ApplicationDto updatedApplication)
+        public async Task<ApplicationDto> UpdateApplicationAsync(Guid applicationId, ApplicationDto updatedApplication)
         {
             if (applicationId == null || updatedApplication == null)
             {
                 return null;
             }
 
-            var currentApplication = _applicationRepository.GetApplication(applicationId);
+            var currentApplication = await _applicationRepository.GetApplicationAsync(applicationId);
 
             currentApplication.Name = updatedApplication.Name!;
             currentApplication.Description = updatedApplication.Description!;
             currentApplication.Outline = updatedApplication.Outline!;
             currentApplication.ActivityId = _activityRepository.GetActivityId(updatedApplication.ActvityTypeName);
-            
 
-           _applicationRepository.UpdateApplication(currentApplication);
+            await _applicationRepository.UpdateApplicationAsync(currentApplication);
 
             return new ApplicationDto
             {
@@ -147,20 +143,20 @@ namespace CallForPappersService.Services
             };
         }
 
-        public async Task SubmitApplication(Guid applicationId)
+        public async Task SubmitApplicationAsync(Guid applicationId)
         {
-            var application = _applicationRepository.GetApplication(applicationId);
+            var application = await _applicationRepository.GetApplicationAsync(applicationId);
 
             application.Status = ApplicationStatus.Active;
 
-            _applicationRepository.UpdateApplication(application);
+            await _applicationRepository.UpdateApplicationAsync(application);
         }
 
-        public async Task DeleteAplication(Guid applicationId)
+        public async Task DeleteAplicationAsync(Guid applicationId)
         {
-            var application = _applicationRepository.GetApplication(applicationId);
+            var application = await _applicationRepository.GetApplicationAsync(applicationId);
 
-            _applicationRepository.DeleteApplication(application);
+            await _applicationRepository.DeleteApplicationAsync(application);
         }
     }
 }

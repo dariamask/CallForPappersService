@@ -74,5 +74,15 @@ namespace CallForPappersService.Controllers
             return await _applicationService.UpdateApplication(applicationId, updatedApplication);
         }
 
+        [HttpPost("{applicationId}/submit")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public async Task<ActionResult> SubmitApplication(Guid applicationId)
+        {
+            await _applicationService.SubmitApplication(applicationId);
+
+            return Ok();
+        }
+
     }
 }

@@ -138,5 +138,13 @@ namespace CallForPappersService.Services
 
             return null;
         }
+        public async Task SubmitApplication(Guid applicationId)
+        {
+            var application = _applicationRepository.GetApplication(applicationId);
+
+            application.Status = ApplicationStatus.Active;
+
+            _applicationRepository.UpdateApplication(application);
+        }
     }
 }

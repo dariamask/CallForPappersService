@@ -10,7 +10,7 @@ namespace CallForPappersService.Services
         public Task<List<ApplicationDto>> GetUnsubmittedApplicationOlderDateAsync(DateTime? unsubmittedOlder);
         public Task<List<ApplicationDto>> GetApplicationsSubmittedAfterDateAsync(DateTime? submittedAfter);
         public Task<ApplicationDto> GetUnsubmittedApplicationAsync(Guid applicationId);
-        public Task<ApplicationDto> UpdateApplicationAsync(Guid applicationId, ApplicationDto updatedApplication);
+        public Task<ApplicationDto> UpdateApplicationAsync(Guid applicationId, ApplicationUpdateDto updatedApplication);
         public Task SubmitApplicationAsync(Guid applicationId);
         public Task DeleteAplicationAsync(Guid applicationId);
     }

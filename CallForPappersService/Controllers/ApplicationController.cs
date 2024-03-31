@@ -69,7 +69,7 @@ namespace CallForPappersService.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult<ApplicationDto>> UpdateApplication(Guid applicationId, [FromBody] ApplicationDto updatedApplication)
+        public async Task<ActionResult<ApplicationDto>> UpdateApplication(Guid applicationId, [FromBody] ApplicationUpdateDto updatedApplication)
         {
             return await _applicationService.UpdateApplicationAsync(applicationId, updatedApplication);
         }

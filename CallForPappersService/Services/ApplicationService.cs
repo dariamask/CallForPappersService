@@ -117,7 +117,7 @@ namespace CallForPappersService.Services
             }
         }
 
-        public async Task<ApplicationDto> UpdateApplicationAsync(Guid applicationId, ApplicationDto updatedApplication)
+        public async Task<ApplicationDto> UpdateApplicationAsync(Guid applicationId, ApplicationUpdateDto updatedApplication)
         {
             if (applicationId == null || updatedApplication == null)
             {

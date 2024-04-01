@@ -3,6 +3,7 @@ using CallForPappersService.Data;
 using CallForPappersService.Repository;
 using CallForPappersService.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using System.Text.Json.Serialization;
 
 namespace CallForPappersService
@@ -13,7 +14,7 @@ namespace CallForPappersService
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            
 
             builder.Services.AddControllers().AddJsonOptions(x =>
                 x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
@@ -26,16 +27,22 @@ namespace CallForPappersService
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
+
             
+
             builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
             builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
             builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
 
             builder.Services.AddScoped<IApplicationService, ApplicationService>();
             builder.Services.AddScoped<IActivityService, ActivityService>();
-
-
             var app = builder.Build();
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var db = scope.ServiceProvider.GetRequiredService<DataContext>();
+                db.Database.Migrate();
+            }
 
             if (args.Length == 1 && args[0].ToLower() == "seeddata")
             {

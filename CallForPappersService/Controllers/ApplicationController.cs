@@ -52,7 +52,7 @@ namespace CallForPappersService.Controllers
         }
 
 
-        [HttpGet("users/{applicationId}")]
+        [HttpGet("~/users/{applicationId}")]
         [ProducesResponseType(200)]
         public async Task<ActionResult<ApplicationDto>> GetUnsubmittedApplication(Guid applicationId)
         {          

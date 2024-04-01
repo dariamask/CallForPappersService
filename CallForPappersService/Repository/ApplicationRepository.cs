@@ -33,11 +33,13 @@ namespace CallForPappersService.Repository
         {
             return await _context.Applications.AnyAsync(a => a.AuthorId == authorId && a.Status == ApplicationStatus.Pending);
         }
+
         public async Task<bool> Save()
         {
             var saved = await _context.SaveChangesAsync();
             return saved > 0 ? true : false;
         }
+
         public async Task<bool> DeleteApplicationAsync(Application application)
         {
             _context.Remove(application);

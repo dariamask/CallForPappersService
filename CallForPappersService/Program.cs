@@ -1,7 +1,9 @@
 using CallForPappersService.Data;
-
+using CallForPappersService.Data.Dto;
 using CallForPappersService.Repository;
 using CallForPappersService.Services;
+using CallForPappersService.Validations;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using System.Text.Json.Serialization;
@@ -36,6 +38,7 @@ namespace CallForPappersService
 
             builder.Services.AddScoped<IApplicationService, ApplicationService>();
             builder.Services.AddScoped<IActivityService, ActivityService>();
+            builder.Services.AddScoped<IValidator<ApplicationCreateDto>, ApplicationCreateDtoValidator>();
             var app = builder.Build();
 
             using (var scope = app.Services.CreateScope())

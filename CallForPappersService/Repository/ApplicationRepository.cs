@@ -34,6 +34,7 @@ namespace CallForPappersService.Repository
             return await _context.Applications.AnyAsync(a => a.AuthorId == authorId && a.Status == ApplicationStatus.Pending);
         }
 
+        //работает не так, как я ожидала. 
         public async Task<bool> Save()
         {
             var saved = await _context.SaveChangesAsync();

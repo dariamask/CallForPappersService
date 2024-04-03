@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using CallForPappersService.Services;
 using System.Threading;
+using FluentValidation;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace CallForPappersService.Controllers
 {
@@ -9,10 +11,14 @@ namespace CallForPappersService.Controllers
     [ApiController]
     public class ApplicationController : Controller
     {
-        private readonly IApplicationService _applicationService;    
-        public ApplicationController(IApplicationService applicationService)
+        private readonly IApplicationService _applicationService;
+        //private readonly ILogger _logger;
+        private readonly IValidator<ApplicationCreateDto> _validator;
+        public ApplicationController(IApplicationService applicationService, IValidator<ApplicationCreateDto> validator)
         {
             _applicationService = applicationService;
+            //_logger = logger;
+            _validator = validator;
         }
 
         [HttpPost]
@@ -20,6 +26,22 @@ namespace CallForPappersService.Controllers
         [ProducesResponseType(400)]
         public async Task<ActionResult<ApplicationDto>> Create([FromBody] ApplicationCreateDto applicationCreateDto, CancellationToken cancellationToken = default)
         {
+            var validationResult = await _validator.ValidateAsync(applicationCreateDto);
+
+            if (!ModelState.IsValid)
+            {
+                var modelStateDictionary = new ModelStateDictionary();
+
+                foreach (var failure in validationResult.Errors)
+                {
+                    modelStateDictionary.AddModelError(
+                        failure.PropertyName,
+                        failure.ErrorMessage);
+                }
+                
+                return ValidationProblem(modelStateDictionary);
+            }
+
             var application = await _applicationService.CreateApplicationAsync(applicationCreateDto, cancellationToken);
             return application == null ? BadRequest("Something went wrong") : Ok(application);
         }

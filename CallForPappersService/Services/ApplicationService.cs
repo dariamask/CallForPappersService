@@ -19,9 +19,6 @@ namespace CallForPappersService.Services
        
         public async Task<ApplicationDto> CreateApplicationAsync(ApplicationCreateDto dto, CancellationToken cancellationToken)
         {
-            ArgumentNullException.ThrowIfNull(dto);
-            
-            if (dto == null) return null;
             if (await _applicationRepository.DraftApplicationExistsAsync(dto.AuthorId)) return null;
 
             var application = new Application
@@ -35,7 +32,7 @@ namespace CallForPappersService.Services
                 Status = ApplicationStatus.Pending,
                 ActivityId = _activityRepository.GetActivityId(dto.ActvityTypeName),             
             };
-
+            
             if (!await _applicationRepository.CreateApplicationAsync(application)) return null;
 
             return new ApplicationDto()

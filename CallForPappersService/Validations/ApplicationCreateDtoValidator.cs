@@ -1,4 +1,5 @@
 ﻿using CallForPappersService.Data.Dto;
+using CallForPappersService.Data.Entities;
 using FluentValidation;
 
 namespace CallForPappersService.Validations
@@ -10,7 +11,7 @@ namespace CallForPappersService.Validations
             RuleFor(x => x.AuthorId).NotEmpty();
             RuleFor(x =>  x.Name).NotEmpty().MaximumLength(100);
             RuleFor(x => x.Description).MaximumLength(300);
-            RuleFor(x => x.Outline).NotEmpty().MaximumLength(1000);          
+            RuleFor(x => x.Outline).NotEmpty().MaximumLength(1000);
         }
     }
 }

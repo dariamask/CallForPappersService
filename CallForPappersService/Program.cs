@@ -1,5 +1,6 @@
 using CallForPappersService.Data;
 using CallForPappersService.Data.Dto;
+using CallForPappersService.Data.Entities;
 using CallForPappersService.Repository;
 using CallForPappersService.Services;
 using CallForPappersService.Validations;
@@ -39,6 +40,7 @@ namespace CallForPappersService
             builder.Services.AddScoped<IApplicationService, ApplicationService>();
             builder.Services.AddScoped<IActivityService, ActivityService>();
             builder.Services.AddScoped<IValidator<ApplicationCreateDto>, ApplicationCreateDtoValidator>();
+            builder.Services.AddScoped<IValidator<ActivityType>, ActivityTypeValidator>();
             var app = builder.Build();
 
             using (var scope = app.Services.CreateScope())

@@ -13,12 +13,15 @@ namespace CallForPappersService.Controllers
     {
         private readonly IApplicationService _applicationService;
         //private readonly ILogger _logger;
-        private readonly IValidator<ApplicationCreateDto> _validator;
-        public ApplicationController(IApplicationService applicationService, IValidator<ApplicationCreateDto> validator)
+        private readonly IValidator<ApplicationCreateDto> _validatorCreate;
+        private readonly IValidator<ApplicationUpdateDto> _validatorUpdate;
+        public ApplicationController(IApplicationService applicationService, 
+                                     IValidator<ApplicationCreateDto> validatorCreate,
+                                     IValidator<ApplicationUpdateDto> validatorUpdate)
         {
             _applicationService = applicationService;
-            //_logger = logger;
-            _validator = validator;
+            _validatorCreate = validatorCreate;
+            _validatorUpdate = validatorUpdate;
         }
 
         [HttpPost]
@@ -26,19 +29,16 @@ namespace CallForPappersService.Controllers
         [ProducesResponseType(400)]
         public async Task<ActionResult<ApplicationDto>> Create([FromBody] ApplicationCreateDto applicationCreateDto, CancellationToken cancellationToken = default)
         {
-            var validationResult = await _validator.ValidateAsync(applicationCreateDto);
+            var validationResult = await _validatorCreate.ValidateAsync(applicationCreateDto);
 
-            if (!ModelState.IsValid)
+            if (!validationResult.IsValid)
             {
                 var modelStateDictionary = new ModelStateDictionary();
 
-                foreach (var failure in validationResult.Errors)
-                {
-                    modelStateDictionary.AddModelError(
-                        failure.PropertyName,
-                        failure.ErrorMessage);
-                }
-                
+                validationResult.Errors
+                    .ForEach(failure => modelStateDictionary
+                    .AddModelError(failure.PropertyName, failure.ErrorMessage));
+
                 return ValidationProblem(modelStateDictionary);
             }
 
@@ -92,9 +92,20 @@ namespace CallForPappersService.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult<ApplicationDto>> UpdateApplication(Guid applicationId, [FromBody] ApplicationUpdateDto updatedApplication)
-        {            
-            var application = await _applicationService.UpdateApplicationAsync(applicationId, updatedApplication);
+        public async Task<ActionResult<ApplicationDto>> UpdateApplication(Guid applicationId, [FromBody] ApplicationUpdateDto applicationUpdateDto)
+        {
+            var validationResult = await _validatorUpdate.ValidateAsync(applicationUpdateDto);
+
+            if (!validationResult.IsValid)
+            {
+                var modelStateDictionary = new ModelStateDictionary();
+
+                validationResult.Errors
+                    .ForEach(x => modelStateDictionary
+                    .AddModelError(x.PropertyName, x.ErrorMessage));
+            }
+
+            var application = await _applicationService.UpdateApplicationAsync(applicationId, applicationUpdateDto);
             return application == null ? BadRequest("Something went wrong") : Ok(application);
         }
 

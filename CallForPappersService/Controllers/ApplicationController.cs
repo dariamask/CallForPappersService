@@ -12,7 +12,6 @@ namespace CallForPappersService.Controllers
     public class ApplicationController : Controller
     {
         private readonly IApplicationService _applicationService;
-        //private readonly ILogger _logger;
         private readonly IValidator<ApplicationCreateDto> _validatorCreate;
         private readonly IValidator<ApplicationUpdateDto> _validatorUpdate;
         public ApplicationController(IApplicationService applicationService, 
@@ -27,7 +26,7 @@ namespace CallForPappersService.Controllers
         [HttpPost]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult<ApplicationDto>> Create([FromBody] ApplicationCreateDto applicationCreateDto, CancellationToken cancellationToken = default)
+        public async Task<ActionResult<ApplicationDto>> Create([FromBody] ApplicationCreateDto applicationCreateDto, CancellationToken cancellationToken)
         {
             var validationResult = await _validatorCreate.ValidateAsync(applicationCreateDto);
 
@@ -49,23 +48,30 @@ namespace CallForPappersService.Controllers
 
         [HttpGet("{applicationId}")]
         [ProducesResponseType(200)]
-        public async Task<ActionResult<ApplicationDto>> GetApplication(Guid applicationId)
+        public async Task<ActionResult<ApplicationDto>> GetApplication(Guid applicationId, CancellationToken cancellationToken)
         {
-            return await _applicationService.GetApplicationAsync(applicationId);
+            var result = await _applicationService.GetApplicationAsync(applicationId, cancellationToken);
+
+            if(! result.IsSuccess)
+            {
+                return BadRequest(result.Error.Description);
+            }
+
+            return Ok(result.Value);
         }
 
 
         [HttpGet]
         [ProducesResponseType(200)]
-        public async Task<ActionResult<List<ApplicationDto>>> GetApplication([FromQuery] DateTime? submittedAfter, [FromQuery] DateTime? unsubmittedOlder)
+        public async Task<ActionResult<List<ApplicationDto>>> GetApplication([FromQuery] DateTime? submittedAfter, [FromQuery] DateTime? unsubmittedOlder, CancellationToken cancellationToken)
         {
             if (unsubmittedOlder == null && submittedAfter != null)
             {
-                return await _applicationService.GetApplicationsSubmittedAfterDateAsync(submittedAfter);
+                return await _applicationService.GetApplicationsSubmittedAfterDateAsync(submittedAfter, cancellationToken);
             }
             else if (submittedAfter == null && unsubmittedOlder != null)
             {
-                return await _applicationService.GetUnsubmittedApplicationOlderDateAsync(unsubmittedOlder);
+                return await _applicationService.GetUnsubmittedApplicationOlderDateAsync(unsubmittedOlder, cancellationToken);
             }
             else
             {
@@ -76,9 +82,9 @@ namespace CallForPappersService.Controllers
 
         [HttpGet("~/users/{applicationId}")]
         [ProducesResponseType(200)]
-        public async Task<ActionResult<ApplicationDto>> GetUnsubmittedApplication(Guid applicationId)
+        public async Task<ActionResult<ApplicationDto>> GetUnsubmittedApplication(Guid applicationId, CancellationToken cancellationToken)
         {          
-            var dto = await _applicationService.GetUnsubmittedApplicationAsync(applicationId);
+            var dto = await _applicationService.GetUnsubmittedApplicationAsync(applicationId, cancellationToken);
 
             if (dto == null)
             {
@@ -92,7 +98,8 @@ namespace CallForPappersService.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult<ApplicationDto>> UpdateApplication(Guid applicationId, [FromBody] ApplicationUpdateDto applicationUpdateDto)
+        public async Task<ActionResult<ApplicationDto>> UpdateApplication(Guid applicationId, 
+            [FromBody] ApplicationUpdateDto applicationUpdateDto, CancellationToken cancellationToken)
         {
             var validationResult = await _validatorUpdate.ValidateAsync(applicationUpdateDto);
 
@@ -105,16 +112,16 @@ namespace CallForPappersService.Controllers
                     .AddModelError(x.PropertyName, x.ErrorMessage));
             }
 
-            var application = await _applicationService.UpdateApplicationAsync(applicationId, applicationUpdateDto);
+            var application = await _applicationService.UpdateApplicationAsync(applicationId, applicationUpdateDto, cancellationToken);
             return application == null ? BadRequest("Something went wrong") : Ok(application);
         }
 
         [HttpPost("{applicationId}/submit")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult> SubmitApplication(Guid applicationId)
+        public async Task<ActionResult> SubmitApplication(Guid applicationId, CancellationToken cancellationToken)
         {
-            var result = await _applicationService.SubmitApplicationAsync(applicationId);
+            var result = await _applicationService.SubmitApplicationAsync(applicationId, cancellationToken);
             return result ? Ok("Success") : BadRequest("Something went wrong with submitting");
         }
 
@@ -122,9 +129,9 @@ namespace CallForPappersService.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult> DeleteApplication(Guid applicationId)
+        public async Task<ActionResult> DeleteApplication(Guid applicationId, CancellationToken cancellationToken)
         {
-            var result = await _applicationService.DeleteAplicationAsync(applicationId);
+            var result = await _applicationService.DeleteAplicationAsync(applicationId, cancellationToken);
             return result ? Ok("Success") : BadRequest("Something went wrong");         
         }
     }

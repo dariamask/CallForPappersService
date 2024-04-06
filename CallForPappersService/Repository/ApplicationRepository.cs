@@ -1,6 +1,7 @@
 ﻿using CallForPappersService.Data;
 using CallForPappersService.Data.Dto;
 using CallForPappersService.Data.Entities;
+using CallForPappersService.Validations.Result;
 using Microsoft.EntityFrameworkCore;
 
 namespace CallForPappersService.Repository
@@ -13,10 +14,21 @@ namespace CallForPappersService.Repository
             _context = context;
         }
 
-        public async Task<bool> ApplicationExists(Guid appId)
+        public async Task<Result<Application>> GetApplicationAsync(Guid applicationId)
         {
-            return await _context.Applications.AnyAsync(a => a.Id == appId);
+            if (!await ApplicationExistsAsync(applicationId))
+            {
+                return ApplicationError.DoesntExist;
+            }
+
+            var app = await _context.Applications
+                .Where(a => a.Id == applicationId)
+                .Include(a => a.Activity)
+                .FirstOrDefaultAsync();
+
+            return app;
         }
+
 
         public async Task<bool> CreateApplicationAsync(Application application)
         {
@@ -45,13 +57,6 @@ namespace CallForPappersService.Repository
         {
             _context.Remove(application);
             return await Save();
-        }
-
-        public async Task<Application> GetApplicationAsync(Guid applicationId)
-        {
-            return await _context.Applications
-                .Where(a => a.Id == applicationId)
-                .FirstOrDefaultAsync();
         }
 
         public async Task<bool> UpdateApplicationAsync(Application application)

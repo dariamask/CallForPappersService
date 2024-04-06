@@ -1,6 +1,7 @@
 using CallForPappersService.Data;
 using CallForPappersService.Data.Dto;
 using CallForPappersService.Data.Entities;
+using CallForPappersService.Middlware;
 using CallForPappersService.Repository;
 using CallForPappersService.Services;
 using CallForPappersService.Validations;
@@ -40,14 +41,11 @@ namespace CallForPappersService
             builder.Services.AddScoped<IApplicationService, ApplicationService>();
             builder.Services.AddScoped<IActivityService, ActivityService>();
             builder.Services.AddScoped<IValidator<ApplicationCreateDto>, ApplicationCreateDtoValidator>();
-            builder.Services.AddScoped<IValidator<ActivityType>, ActivityTypeValidator>();
+            builder.Services.AddScoped<IValidator<ApplicationUpdateDto>, ApplicationUpdateDtoValidator>();
+
             var app = builder.Build();
 
-            using (var scope = app.Services.CreateScope())
-            {
-                var db = scope.ServiceProvider.GetRequiredService<DataContext>();
-                db.Database.Migrate();
-            }
+            app.UseMiddleware<CancellationHandlingMiddleware>();
 
             if (args.Length == 1 && args[0].ToLower() == "seeddata")
             {

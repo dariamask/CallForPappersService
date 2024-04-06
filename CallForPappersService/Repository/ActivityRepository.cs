@@ -21,6 +21,10 @@ namespace CallForPappersService.Repository
         {
             return _context.Activities.Where(a => a.ActivityType == activityType).FirstOrDefault();
         }
+        public Activity? GetActivity(Guid activityId)
+        {
+            return _context.Activities.Where(a => a.Id == activityId).FirstOrDefault();
+        }
 
         public Guid GetActivityId(ActivityType activityType)
         {

@@ -1,11 +1,12 @@
 ﻿using CallForPappersService.Data.Dto;
 using CallForPappersService.Data.Entities;
+using CallForPappersService.Validations.Result;
 
 namespace CallForPappersService.Repository
 {
     public interface IApplicationRepository
     {
-        Task<Application> GetApplicationAsync(Guid applicationId);
+        Task<Result<Application>> GetApplicationAsync(Guid applicationId);
         Task<bool> DraftApplicationExistsAsync(Guid authorId);
         Task<bool> ApplicationExistsAsync(Guid applicationId);
         Task<bool> CreateApplicationAsync(Application application);

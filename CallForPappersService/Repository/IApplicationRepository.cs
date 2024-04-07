@@ -6,8 +6,8 @@ namespace CallForPappersService.Repository
 {
     public interface IApplicationRepository
     {
-        Task<Result<Application>> GetApplicationAsync(Guid applicationId);
-        Task<bool> DraftApplicationExistsAsync(Guid authorId);
+        Task<Application> GetApplicationAsync(Guid applicationId);
+        Task<bool> PendingApplicationExistsAsync(Guid authorId);
         Task<bool> ApplicationExistsAsync(Guid applicationId);
         Task<bool> CreateApplicationAsync(Application application);
         Task<bool> UpdateApplicationAsync(Application application);

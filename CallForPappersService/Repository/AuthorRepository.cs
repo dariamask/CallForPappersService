@@ -10,9 +10,9 @@ namespace CallForPappersService.Repository
         {
             _context = context;
         }
-        public bool AuthorExists(Guid authorId)
+        public async Task<bool> AuthorExistsAsync(Guid authorId)
         {
-            return _context.Authors.Any(a => a.Id == authorId);
+            return await _context.Authors.AnyAsync(a => a.Id == authorId);
         }
     }
 }

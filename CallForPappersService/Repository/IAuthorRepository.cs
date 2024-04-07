@@ -2,6 +2,6 @@
 {
     public interface IAuthorRepository
     {
-        bool AuthorExists(Guid authorId);
+        Task<bool> AuthorExistsAsync (Guid authorId);
     }
 }

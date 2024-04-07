@@ -41,8 +41,14 @@ namespace CallForPappersService.Controllers
                 return ValidationProblem(modelStateDictionary);
             }
 
-            var application = await _applicationService.CreateApplicationAsync(applicationCreateDto, cancellationToken);
-            return application == null ? BadRequest("Something went wrong") : Ok(application);
+            var result = await _applicationService.CreateApplicationAsync(applicationCreateDto, cancellationToken);
+
+            if (!result.IsSuccess)
+            {
+                return BadRequest(result.Error.Description);            
+            }
+
+            return Ok(result.Value);
         }
 
 
@@ -52,7 +58,7 @@ namespace CallForPappersService.Controllers
         {
             var result = await _applicationService.GetApplicationAsync(applicationId, cancellationToken);
 
-            if(! result.IsSuccess)
+            if(!result.IsSuccess)
             {
                 return BadRequest(result.Error.Description);
             }
@@ -122,7 +128,13 @@ namespace CallForPappersService.Controllers
         public async Task<ActionResult> SubmitApplication(Guid applicationId, CancellationToken cancellationToken)
         {
             var result = await _applicationService.SubmitApplicationAsync(applicationId, cancellationToken);
-            return result ? Ok("Success") : BadRequest("Something went wrong with submitting");
+            
+            if (result.IsFailure)
+            {
+                return BadRequest(result.Error.Description);
+            }
+
+            return Ok();
         }
 
         [HttpDelete("{applicationId}")]
@@ -132,7 +144,13 @@ namespace CallForPappersService.Controllers
         public async Task<ActionResult> DeleteApplication(Guid applicationId, CancellationToken cancellationToken)
         {
             var result = await _applicationService.DeleteAplicationAsync(applicationId, cancellationToken);
-            return result ? Ok("Success") : BadRequest("Something went wrong");         
+
+            if (result.IsFailure)
+            {
+                return BadRequest(result.Error.Description);
+            }
+
+            return Ok();
         }
     }
 }

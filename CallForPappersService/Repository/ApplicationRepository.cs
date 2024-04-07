@@ -14,13 +14,8 @@ namespace CallForPappersService.Repository
             _context = context;
         }
 
-        public async Task<Result<Application>> GetApplicationAsync(Guid applicationId)
+        public async Task<Application> GetApplicationAsync(Guid applicationId)
         {
-            if (!await ApplicationExistsAsync(applicationId))
-            {
-                return ApplicationError.DoesntExist;
-            }
-
             var app = await _context.Applications
                 .Where(a => a.Id == applicationId)
                 .Include(a => a.Activity)
@@ -41,7 +36,7 @@ namespace CallForPappersService.Repository
             return await _context.Applications.AnyAsync(a => a.Id == applicationId);
         }
 
-        public async Task<bool> DraftApplicationExistsAsync(Guid authorId)
+        public async Task<bool> PendingApplicationExistsAsync(Guid authorId)
         {
             return await _context.Applications.AnyAsync(a => a.AuthorId == authorId && a.Status == ApplicationStatus.Pending);
         }

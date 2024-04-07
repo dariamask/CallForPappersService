@@ -2,31 +2,43 @@
 
 namespace CallForPappersService.Validations.Result
 {
-    public class Result<T>
+    public class Result
     {
-        public T? Value { get; set; }
-        public Error? Error { get; }
-        public bool IsSuccess { get; }
+        public bool IsSuccess { get; private set; }
+        public Error Error { get; private set; }
         public bool IsFailure => !IsSuccess;
 
-        public Result(T value)
+        protected Result() { }
+        protected internal Result(Error error)
         {
-            Value = value;
-            Error = Error.None;
-            IsSuccess = true;
-        }
-
-        public Result(Error error)
-        {
-            Value = default;
             Error = error;
-            IsSuccess = false;
+        }
+        protected Result(bool isSuccess, Error error) 
+        { 
+            IsSuccess = isSuccess;
+            Error = error;
         }
 
-        //public static Result<T> Success(T value) => new(value);
-        //public static Result<T> Failure(Error error) => new(error);
+        public static Result Success() => new(true, Error.None);
+        public static Result Failure(Error error) => new (false, error);
+
+        public static implicit operator Result(Error error) => Failure(error);
+    }
+
+    public class Result<T> : Result
+    {
+        public T Value { get; set; }
+
+        protected internal Result(T value)
+            : base()
+        {
+            Value = value;           
+        }
+
+        protected internal Result(Error error)
+            : base(error) {}
 
         public static implicit operator Result<T>(Error error) => new (error);
-        public static implicit operator Result<T>(T Value) => new (Value);
+        public static implicit operator Result<T>(T value) => new(value);
     }
 }

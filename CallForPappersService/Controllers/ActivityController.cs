@@ -1,10 +1,8 @@
-﻿using CallForPappersService.Data;
-using CallForPappersService.Data.Entities;
-using CallForPappersService.Data.Dto;
-using Microsoft.AspNetCore.Mvc;
-using CallForPappersService.Services;
+﻿using Microsoft.AspNetCore.Mvc;
+using CallForPappersService_BAL.Services;
+using CallForPappersService_BAL.Dto;
 
-namespace CallForPappersService.Controllers
+namespace CallForPappersService_PL.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

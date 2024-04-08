@@ -1,4 +1,4 @@
-﻿namespace CallForPappersService.Middlware
+﻿namespace CallForPappersService_PL.Middlware
 {
     public class CancellationHandlingMiddleware
     {

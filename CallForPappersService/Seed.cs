@@ -1,8 +1,9 @@
-﻿using CallForPappersService.Data;
-using CallForPappersService.Data.Entities;
+﻿
 
+using CallForPappersService_DAL.Data;
+using CallForPappersService_DAL.Data.Entities;
 
-namespace CallForPappersService
+namespace CallForPappersService_PL
 {
     public class Seed
     {

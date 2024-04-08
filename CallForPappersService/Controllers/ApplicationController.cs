@@ -1,11 +1,10 @@
-﻿using CallForPappersService.Data.Dto;
-using Microsoft.AspNetCore.Mvc;
-using CallForPappersService.Services;
-using System.Threading;
+﻿using Microsoft.AspNetCore.Mvc;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using CallForPappersService_BAL.Services;
+using CallForPappersService_BAL.Dto;
 
-namespace CallForPappersService.Controllers
+namespace CallForPappersService_PL.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

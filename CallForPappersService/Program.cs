@@ -1,16 +1,15 @@
-using CallForPappersService.Data;
-using CallForPappersService.Data.Dto;
-using CallForPappersService.Data.Entities;
-using CallForPappersService.Middlware;
-using CallForPappersService.Repository;
-using CallForPappersService.Services;
-using CallForPappersService.Validations;
+using CallForPappersService_PL.Middlware;
+using CallForPappersService_DAL.Repository;
+using CallForPappersService_BAL.Services;
+using CallForPappersService_BAL.Validations;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using System.Text.Json.Serialization;
+using CallForPappersService_DAL.Data;
+using CallForPappersService_BAL.Dto;
 
-namespace CallForPappersService
+namespace CallForPappersService_PL
 {
     public class Program
     {

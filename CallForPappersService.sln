@@ -5,9 +5,9 @@ VisualStudioVersion = 17.7.34031.279
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CallForPappersService_PL", "CallForPappersService\CallForPappersService_PL.csproj", "{B2E3CF5D-8D5A-493E-B8B8-D5A2D503226F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CallForPappersService_DAL", "DAL\CallForPappersService_DAL.csproj", "{97A680FF-765F-47DD-B6B7-149C44C892B8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CallForPappersService_DAL", "DAL\CallForPappersService_DAL.csproj", "{97A680FF-765F-47DD-B6B7-149C44C892B8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CallForPappersService_BAL", "BAL\CallForPappersService_BAL.csproj", "{98CA4BC1-34A0-47D8-AC21-B949FA310989}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CallForPappersService_BAL", "BAL\CallForPappersService_BAL.csproj", "{98CA4BC1-34A0-47D8-AC21-B949FA310989}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -37,10 +37,7 @@ namespace CallForPappersService_BAL.Services
             {
                 var result = new List<IError>();
 
-                validationResult.Errors
-                    .ForEach(failure => result.Add(new Error(failure.ErrorMessage)));
-
-                return Result.Fail(result);
+                return Result.Fail(validationResult.Errors.Select(failure => failure.ErrorMessage));
             }
             if (await _applicationRepository.PendingApplicationExistsAsync(dto.AuthorId))
             {

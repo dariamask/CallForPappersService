@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using CallForPappersService_BAL.Services;
 using CallForPappersService_BAL.Dto;
 using FluentResults;
+using FluentResults.Extensions.AspNetCore;
 
 namespace CallForPappersService_PL.Controllers
 {
@@ -22,9 +23,10 @@ namespace CallForPappersService_PL.Controllers
         [ProducesResponseType(400)]
         public async Task<ActionResult<ApplicationDto>> Create([FromBody] ApplicationCreateDto applicationCreateDto, CancellationToken cancellationToken)
         {
+
             var result = await _applicationService.CreateApplicationAsync(applicationCreateDto, cancellationToken);
 
-            return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Errors);
+            return result.ToActionResult();
         }
 
 
@@ -56,15 +58,6 @@ namespace CallForPappersService_PL.Controllers
             }
         }
 
-
-        [HttpGet("~/users/{userId}/currentapplication")]
-        [ProducesResponseType(200)]
-        public async Task<ActionResult<ApplicationDto>> GetUnsubmittedApplication(Guid userId, CancellationToken cancellationToken)
-        {          
-            var result = await _applicationService.GetUnsubmittedApplicationAsync(userId, cancellationToken);
-
-            return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Errors[0]);
-        }
 
         [HttpPut("{applicationId}")]
         [ProducesResponseType(400)]

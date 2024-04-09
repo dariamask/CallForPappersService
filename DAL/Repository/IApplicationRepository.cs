@@ -1,4 +1,5 @@
 ﻿using CallForPappersService_DAL.Data.Entities;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace CallForPappersService_DAL.Repository
@@ -13,6 +14,7 @@ namespace CallForPappersService_DAL.Repository
         Task<bool> DeleteApplicationAsync(Application application);
         Task<List<Application>> GetUnsubmittedApplicationOlderDateAsync(DateTime? unsubmittedOlder);
         Task<List<Application>> GetApplicationsSubmittedAfterDateAsync(DateTime? submittedAfter);
-        Task<Application> GetUnsubmittedApplicationAsync(Guid applicationId);
+        Task<Application> GetUnsubmittedApplicationAsync(Guid authorId);
+        Task<bool> AuthorExistsAsync(Guid authorId);
     }
 }

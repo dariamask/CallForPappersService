@@ -6,10 +6,10 @@ namespace CallForPappersService_PL.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ActivityController : Controller
+    public class activitiesController : Controller
     {
         private readonly IActivityService _activityService;
-        public ActivityController(IActivityService activityService)
+        public activitiesController(IActivityService activityService)
         {
             _activityService = activityService;
         }

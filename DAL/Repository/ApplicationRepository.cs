@@ -75,14 +75,16 @@ namespace CallForPappersService_DAL.Repository
                 .ToListAsync();
         }
 
-        public async Task<Application> GetUnsubmittedApplicationAsync(Guid applicationId)
+        public async Task<Application> GetUnsubmittedApplicationAsync(Guid authorId)
         {
-            var app = await _context.Applications
-                .Where(a => a.Id == applicationId && a.Status == ApplicationStatus.Pending)
-                .Include(a => a.Activity)
+            return await _context.Applications
+                .Where(a => a.AuthorId == authorId && a.Status == ApplicationStatus.Pending)
+                .Include (a => a.Activity)
                 .FirstOrDefaultAsync();
-
-            return app;
+        }
+        public async Task<bool> AuthorExistsAsync(Guid authorId)
+        {
+            return await _context.Applications.AnyAsync(a => a.AuthorId == authorId);
         }
     }
 }

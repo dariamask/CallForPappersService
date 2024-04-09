@@ -17,8 +17,6 @@ namespace CallForPappersService_PL
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            
-
             builder.Services.AddControllers().AddJsonOptions(x =>
                 x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
             builder.Services.AddControllers().AddJsonOptions(x =>
@@ -30,15 +28,13 @@ namespace CallForPappersService_PL
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
-
             
-
             builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
             builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
-            builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
 
             builder.Services.AddScoped<IApplicationService, ApplicationService>();
             builder.Services.AddScoped<IActivityService, ActivityService>();
+            
             builder.Services.AddScoped<IValidator<ApplicationCreateDto>, ApplicationCreateDtoValidator>();
             builder.Services.AddScoped<IValidator<ApplicationUpdateDto>, ApplicationUpdateDtoValidator>();
 

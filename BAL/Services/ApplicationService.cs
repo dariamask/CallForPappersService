@@ -1,8 +1,13 @@
-﻿
+﻿using FluentValidation;
 using CallForPappersService_DAL.Data.Entities;
 using CallForPappersService_DAL.Repository;
 using CallForPappersService_BAL.Validations.Result;
 using CallForPappersService_BAL.Dto;
+using System.ComponentModel.DataAnnotations;
+using System.Web.Http.ModelBinding;
+using System.Reflection.Metadata.Ecma335;
+using FluentResults;
+using Error = FluentResults.Error;
 
 namespace CallForPappersService_BAL.Services
 {
@@ -10,22 +15,36 @@ namespace CallForPappersService_BAL.Services
     {
         private readonly IApplicationRepository _applicationRepository;
         private readonly IActivityRepository _activityRepository;
-        private readonly IAuthorRepository _authorRepository;
+        private readonly IValidator<ApplicationCreateDto> _validatorCreate;
+        private readonly IValidator<ApplicationUpdateDto> _validatorUpdate;
 
         public ApplicationService(IApplicationRepository applicationRepository, 
             IActivityRepository activityRepository, 
-            IAuthorRepository authorRepository)
+            IValidator<ApplicationCreateDto> validatorCreate,
+            IValidator<ApplicationUpdateDto> validatorUpdate)
         {
             _applicationRepository = applicationRepository;
             _activityRepository = activityRepository;
-            _authorRepository = authorRepository;
+            _validatorCreate = validatorCreate;
+            _validatorUpdate = validatorUpdate;
         }
        
         public async Task<Result<ApplicationDto>> CreateApplicationAsync(ApplicationCreateDto dto, CancellationToken cancellationToken)
         {
+            var validationResult = await _validatorCreate.ValidateAsync(dto, cancellationToken);
+
+            if (!validationResult.IsValid)
+            {
+                var result = new List<IError>();
+
+                validationResult.Errors
+                    .ForEach(failure => result.Add(new Error(failure.ErrorMessage)));
+
+                return Result.Fail(result);
+            }
             if (await _applicationRepository.PendingApplicationExistsAsync(dto.AuthorId))
             {
-                return ApplicationError.PendingAlreadyExist;
+                return Result.Fail(ApplicationError.PendingAlreadyExist);
             }
 
             var application = new Application
@@ -57,7 +76,7 @@ namespace CallForPappersService_BAL.Services
         {
             if (!await _applicationRepository.ApplicationExistsAsync(applicationId))
             {
-                return ApplicationError.DoesntExist;
+                return Result.Fail(ApplicationError.DoesntExist);
             }
 
             var application = await _applicationRepository.GetApplicationAsync(applicationId);
@@ -103,9 +122,14 @@ namespace CallForPappersService_BAL.Services
             }).ToList();
         }
 
-        public async Task<ApplicationDto> GetUnsubmittedApplicationAsync(Guid applicationId, CancellationToken cancellationToken)
+        public async Task<Result<ApplicationDto>> GetUnsubmittedApplicationAsync(Guid authorId, CancellationToken cancellationToken)
         {
-            var application = await _applicationRepository.GetUnsubmittedApplicationAsync(applicationId);
+            if (! await _applicationRepository.AuthorExistsAsync(authorId))
+            {
+                return Result.Fail(AuthorError.DoesntExist);
+            }
+
+            var application = await _applicationRepository.GetUnsubmittedApplicationAsync(authorId);
 
             if (application == null)
             {
@@ -129,17 +153,17 @@ namespace CallForPappersService_BAL.Services
         {
             if (!await _applicationRepository.ApplicationExistsAsync(applicationId))
             {
-                return ApplicationError.DoesntExist;
+                return Result.Fail(ApplicationError.DoesntExist);
             }
 
             var application = await _applicationRepository.GetApplicationAsync(applicationId);
   
             if (application.Status == ApplicationStatus.Active)
             {
-                return ApplicationError.CantUpdateActive;
+                return Result.Fail(ApplicationError.CantUpdateActive);
             }
 
-            //не симпатично, надо переделать
+            //
             application.Name = updatedApplication.Name!;
             application.Description = updatedApplication.Description!;
             application.Outline = updatedApplication.Outline!;
@@ -162,40 +186,57 @@ namespace CallForPappersService_BAL.Services
         {
             if (!await _applicationRepository.ApplicationExistsAsync(applicationId))
             {
-                return ApplicationError.DoesntExist;
+                return Result.Fail(ApplicationError.DoesntExist);
             }
 
             var application = await _applicationRepository.GetApplicationAsync(applicationId);
 
             if ( application.Status is ApplicationStatus.Active )
             {
-                return ApplicationError.CantUpdateActive;
+                return Result.Fail(ApplicationError.CantUpdateActive);
             }
             
             application.Status = ApplicationStatus.Active;
+            application.SubmitDate = DateTime.Now;
 
             await _applicationRepository.UpdateApplicationAsync(application);
 
-            return Result.Success();
+            return Result.Ok();
         }
 
         public async Task<Result> DeleteAplicationAsync(Guid applicationId, CancellationToken cancellationToken)
         {
             if (!await _applicationRepository.ApplicationExistsAsync(applicationId))
             {
-                return ApplicationError.DoesntExist;
+                return Result.Fail(ApplicationError.DoesntExist);
             }
 
             var application = await _applicationRepository.GetApplicationAsync(applicationId);
 
             if (application.Status == ApplicationStatus.Active)
             {
-                return ApplicationError.CantDeleteActive;
+                return Result.Fail(ApplicationError.CantDeleteActive);
             }
             
             await _applicationRepository.DeleteApplicationAsync(application);
 
-            return Result.Success();
+            return Result.Ok();
         }
+
+        //private static ModelStateDictionary ToModelState(ValidationResult validationResult)
+        //{
+
+        //    if (!validationResult.IsValid)
+        //    {
+        //        var modelStateDictionary = new ModelStateDictionary();
+
+        //        validationResult.Errors
+        //            .ForEach(failure => modelStateDictionary
+        //            .AddModelError(failure.PropertyName, failure.ErrorMessage));
+
+        //        return ValidationProblem(modelStateDictionary);
+        //    }
+        //}
+
     }
 }

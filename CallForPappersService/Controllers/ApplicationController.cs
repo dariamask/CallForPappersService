@@ -3,6 +3,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using CallForPappersService_BAL.Services;
 using CallForPappersService_BAL.Dto;
+using FluentResults;
 
 namespace CallForPappersService_PL.Controllers
 {
@@ -11,15 +12,9 @@ namespace CallForPappersService_PL.Controllers
     public class ApplicationController : Controller
     {
         private readonly IApplicationService _applicationService;
-        private readonly IValidator<ApplicationCreateDto> _validatorCreate;
-        private readonly IValidator<ApplicationUpdateDto> _validatorUpdate;
-        public ApplicationController(IApplicationService applicationService, 
-                                     IValidator<ApplicationCreateDto> validatorCreate,
-                                     IValidator<ApplicationUpdateDto> validatorUpdate)
+        public ApplicationController(IApplicationService applicationService)
         {
             _applicationService = applicationService;
-            _validatorCreate = validatorCreate;
-            _validatorUpdate = validatorUpdate;
         }
 
         [HttpPost]
@@ -27,27 +22,9 @@ namespace CallForPappersService_PL.Controllers
         [ProducesResponseType(400)]
         public async Task<ActionResult<ApplicationDto>> Create([FromBody] ApplicationCreateDto applicationCreateDto, CancellationToken cancellationToken)
         {
-            var validationResult = await _validatorCreate.ValidateAsync(applicationCreateDto);
-
-            if (!validationResult.IsValid)
-            {
-                var modelStateDictionary = new ModelStateDictionary();
-
-                validationResult.Errors
-                    .ForEach(failure => modelStateDictionary
-                    .AddModelError(failure.PropertyName, failure.ErrorMessage));
-
-                return ValidationProblem(modelStateDictionary);
-            }
-
             var result = await _applicationService.CreateApplicationAsync(applicationCreateDto, cancellationToken);
 
-            if (!result.IsSuccess)
-            {
-                return BadRequest(result.Error.Description);            
-            }
-
-            return Ok(result.Value);
+            return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Errors);
         }
 
 
@@ -57,12 +34,7 @@ namespace CallForPappersService_PL.Controllers
         {
             var result = await _applicationService.GetApplicationAsync(applicationId, cancellationToken);
 
-            if(!result.IsSuccess)
-            {
-                return BadRequest(result.Error.Description);
-            }
-
-            return Ok(result.Value);
+            return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Errors);
         }
 
 
@@ -85,18 +57,13 @@ namespace CallForPappersService_PL.Controllers
         }
 
 
-        [HttpGet("~/users/{applicationId}")]
+        [HttpGet("~/users/{userId}/currentapplication")]
         [ProducesResponseType(200)]
-        public async Task<ActionResult<ApplicationDto>> GetUnsubmittedApplication(Guid applicationId, CancellationToken cancellationToken)
+        public async Task<ActionResult<ApplicationDto>> GetUnsubmittedApplication(Guid userId, CancellationToken cancellationToken)
         {          
-            var dto = await _applicationService.GetUnsubmittedApplicationAsync(applicationId, cancellationToken);
+            var result = await _applicationService.GetUnsubmittedApplicationAsync(userId, cancellationToken);
 
-            if (dto == null)
-            {
-                return BadRequest("Application status is active or it doesn't exists");
-            }
-
-            return Ok(dto);
+            return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Errors[0]);
         }
 
         [HttpPut("{applicationId}")]
@@ -106,16 +73,16 @@ namespace CallForPappersService_PL.Controllers
         public async Task<ActionResult<ApplicationDto>> UpdateApplication(Guid applicationId, 
             [FromBody] ApplicationUpdateDto applicationUpdateDto, CancellationToken cancellationToken)
         {
-            var validationResult = await _validatorUpdate.ValidateAsync(applicationUpdateDto);
+            //var validationResult = await _validatorUpdate.ValidateAsync(applicationUpdateDto);
 
-            if (!validationResult.IsValid)
-            {
-                var modelStateDictionary = new ModelStateDictionary();
+            //if (!validationResult.IsValid)
+            //{
+            //    var modelStateDictionary = new ModelStateDictionary();
 
-                validationResult.Errors
-                    .ForEach(x => modelStateDictionary
-                    .AddModelError(x.PropertyName, x.ErrorMessage));
-            }
+            //    validationResult.Errors
+            //        .ForEach(x => modelStateDictionary
+            //        .AddModelError(x.PropertyName, x.ErrorMessage));
+            //}
 
             var application = await _applicationService.UpdateApplicationAsync(applicationId, applicationUpdateDto, cancellationToken);
             return application == null ? BadRequest("Something went wrong") : Ok(application);
@@ -127,13 +94,8 @@ namespace CallForPappersService_PL.Controllers
         public async Task<ActionResult> SubmitApplication(Guid applicationId, CancellationToken cancellationToken)
         {
             var result = await _applicationService.SubmitApplicationAsync(applicationId, cancellationToken);
-            
-            if (result.IsFailure)
-            {
-                return BadRequest(result.Error.Description);
-            }
 
-            return Ok();
+            return result.IsSuccess ? Ok() : BadRequest(result.Errors);
         }
 
         [HttpDelete("{applicationId}")]
@@ -144,12 +106,7 @@ namespace CallForPappersService_PL.Controllers
         {
             var result = await _applicationService.DeleteAplicationAsync(applicationId, cancellationToken);
 
-            if (result.IsFailure)
-            {
-                return BadRequest(result.Error.Description);
-            }
-
-            return Ok();
+            return result.IsSuccess ? Ok() : BadRequest(result.Errors);
         }
     }
 }

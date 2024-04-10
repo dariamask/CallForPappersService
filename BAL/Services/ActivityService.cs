@@ -17,9 +17,7 @@ namespace CallForPappersService_BAL.Services
         {
             var activities = await _activityRepository.GetActivitiesAsync();
 
-            var activitiesDto = new List<ActivityDto>();
-
-            return activitiesDto.Select(x => new ActivityDto
+            return activities.Select(x => new ActivityDto
             {
                 Id = x.Id,
                 ActivityType = x.ActivityType,

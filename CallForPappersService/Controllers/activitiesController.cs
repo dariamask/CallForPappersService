@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using CallForPappersService_BAL.Services;
 using CallForPappersService_BAL.Dto;
+using FluentResults.Extensions.AspNetCore;
 
 namespace CallForPappersService_PL.Controllers
 {
@@ -18,8 +19,8 @@ namespace CallForPappersService_PL.Controllers
         [ProducesResponseType(200)]
         public async Task<ActionResult<List<ActivityDto>>> GetActivitiesAsync()
         {
-            var activities = await _activityService.GetActivitiesAsync();
-            return Ok(activities);
+            var result = await _activityService.GetActivitiesAsync();
+            return result.ToActionResult();
         }
     }
 }

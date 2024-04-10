@@ -1,6 +1,7 @@
 ﻿using CallForPappersService_BAL.Dto;
 using CallForPappersService_DAL;
 using CallForPappersService_DAL.Repository;
+using FluentResults;
 
 namespace CallForPappersService_BAL.Services
 {
@@ -12,25 +13,18 @@ namespace CallForPappersService_BAL.Services
             _activityRepository = activityRepository;
         }
 
-        public async Task<List<ActivityDto>> GetActivitiesAsync()
+        public async Task<Result<List<ActivityDto>>> GetActivitiesAsync()
         {
             var activities = await _activityRepository.GetActivitiesAsync();
 
-            var dtos = new List<ActivityDto>();
+            var activitiesDto = new List<ActivityDto>();
 
-            foreach (var activity in activities)
+            return activitiesDto.Select(x => new ActivityDto
             {
-                var dto = new ActivityDto()
-                {
-                    Id = activity.Id,
-                    ActivityType = activity.ActivityType,
-                    Description = activity.Description,
-                };
-
-                dtos.Add(dto);
-            }
-
-            return dtos;
+                Id = x.Id,
+                ActivityType = x.ActivityType,
+                Description = x.Description,
+            }).ToList();
         }
     }
 }

@@ -9,10 +9,10 @@ namespace CallForPappersService_PL.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ApplicationController : Controller
+    public class applicationsController : Controller
     {
         private readonly IApplicationService _applicationService;
-        public ApplicationController(IApplicationService applicationService)
+        public applicationsController(IApplicationService applicationService)
         {
             _applicationService = applicationService;
         }

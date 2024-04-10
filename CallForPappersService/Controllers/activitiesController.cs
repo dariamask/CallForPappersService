@@ -18,7 +18,8 @@ namespace CallForPappersService_PL.Controllers
         [ProducesResponseType(200)]
         public async Task<ActionResult<List<ActivityDto>>> GetActivitiesAsync()
         {
-            return await _activityService.GetActivitiesAsync();
+            var activities = await _activityService.GetActivitiesAsync();
+            return Ok(activities);
         }
     }
 }

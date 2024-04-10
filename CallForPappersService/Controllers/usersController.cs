@@ -1,5 +1,6 @@
 ﻿using CallForPappersService_BAL.Dto;
 using CallForPappersService_BAL.Services;
+using FluentResults.Extensions.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 using System.Runtime.CompilerServices;
 
@@ -21,7 +22,7 @@ namespace CallForPappersService_PL.Controllers
         {
             var result = await _applicationService.GetUnsubmittedApplicationAsync(userId, cancellationToken);
 
-            return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Errors[0]);
+            return result.ToActionResult();
         }
     }
 }

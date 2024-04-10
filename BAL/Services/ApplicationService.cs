@@ -39,6 +39,7 @@ namespace CallForPappersService_BAL.Services
 
                 return Result.Fail(validationResult.Errors.Select(failure => failure.ErrorMessage));
             }
+
             if (await _applicationRepository.PendingApplicationExistsAsync(dto.AuthorId))
             {
                 return Result.Fail(ApplicationError.PendingAlreadyExist);
@@ -89,7 +90,7 @@ namespace CallForPappersService_BAL.Services
             };
         }
 
-        public async Task<List<ApplicationDto>> GetUnsubmittedApplicationOlderDateAsync(DateTime? unsubmittedOlder, CancellationToken cancellationToken)
+        public async Task<Result<List<ApplicationDto>>> GetUnsubmittedApplicationOlderDateAsync(DateTime? unsubmittedOlder, CancellationToken cancellationToken)
         {
             var applications = await _applicationRepository.GetUnsubmittedApplicationOlderDateAsync(unsubmittedOlder);
 
@@ -104,7 +105,7 @@ namespace CallForPappersService_BAL.Services
             }).ToList();
         }
 
-        public async Task<List<ApplicationDto>> GetApplicationsSubmittedAfterDateAsync(DateTime? submittedAfter, CancellationToken cancellationToken)
+        public async Task<Result<List<ApplicationDto>>> GetApplicationsSubmittedAfterDateAsync(DateTime? submittedAfter, CancellationToken cancellationToken)
         {
             var applications = await _applicationRepository.GetApplicationsSubmittedAfterDateAsync(submittedAfter);
 
@@ -148,6 +149,15 @@ namespace CallForPappersService_BAL.Services
 
         public async Task<Result<ApplicationDto>> UpdateApplicationAsync(Guid applicationId, ApplicationUpdateDto updatedApplication, CancellationToken cancellationToken)
         {
+            var validationResult = await _validatorUpdate.ValidateAsync(updatedApplication, cancellationToken);
+
+            if (!validationResult.IsValid)
+            {
+                var result = new List<IError>();
+
+                return Result.Fail(validationResult.Errors.Select(failure => failure.ErrorMessage));
+            }
+
             if (!await _applicationRepository.ApplicationExistsAsync(applicationId))
             {
                 return Result.Fail(ApplicationError.DoesntExist);
@@ -159,8 +169,7 @@ namespace CallForPappersService_BAL.Services
             {
                 return Result.Fail(ApplicationError.CantUpdateActive);
             }
-
-            //
+           
             application.Name = updatedApplication.Name!;
             application.Description = updatedApplication.Description!;
             application.Outline = updatedApplication.Outline!;
@@ -219,21 +228,6 @@ namespace CallForPappersService_BAL.Services
 
             return Result.Ok();
         }
-
-        //private static ModelStateDictionary ToModelState(ValidationResult validationResult)
-        //{
-
-        //    if (!validationResult.IsValid)
-        //    {
-        //        var modelStateDictionary = new ModelStateDictionary();
-
-        //        validationResult.Errors
-        //            .ForEach(failure => modelStateDictionary
-        //            .AddModelError(failure.PropertyName, failure.ErrorMessage));
-
-        //        return ValidationProblem(modelStateDictionary);
-        //    }
-        //}
 
     }
 }

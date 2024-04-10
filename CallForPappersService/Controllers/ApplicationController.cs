@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using FluentValidation;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using CallForPappersService_BAL.Services;
 using CallForPappersService_BAL.Dto;
-using FluentResults;
 using FluentResults.Extensions.AspNetCore;
+using Microsoft.Net.Http.Headers;
+using FluentResults;
 
 namespace CallForPappersService_PL.Controllers
 {
@@ -23,7 +22,6 @@ namespace CallForPappersService_PL.Controllers
         [ProducesResponseType(400)]
         public async Task<ActionResult<ApplicationDto>> Create([FromBody] ApplicationCreateDto applicationCreateDto, CancellationToken cancellationToken)
         {
-
             var result = await _applicationService.CreateApplicationAsync(applicationCreateDto, cancellationToken);
 
             return result.ToActionResult();
@@ -36,7 +34,7 @@ namespace CallForPappersService_PL.Controllers
         {
             var result = await _applicationService.GetApplicationAsync(applicationId, cancellationToken);
 
-            return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Errors);
+            return result.ToActionResult();
         }
 
 
@@ -44,18 +42,14 @@ namespace CallForPappersService_PL.Controllers
         [ProducesResponseType(200)]
         public async Task<ActionResult<List<ApplicationDto>>> GetApplication([FromQuery] DateTime? submittedAfter, [FromQuery] DateTime? unsubmittedOlder, CancellationToken cancellationToken)
         {
-            if (unsubmittedOlder == null && submittedAfter != null)
+            Result<List<ApplicationDto>> result = (submittedAfter, unsubmittedOlder) switch
             {
-                return await _applicationService.GetApplicationsSubmittedAfterDateAsync(submittedAfter, cancellationToken);
-            }
-            else if (submittedAfter == null && unsubmittedOlder != null)
-            {
-                return await _applicationService.GetUnsubmittedApplicationOlderDateAsync(unsubmittedOlder, cancellationToken);
-            }
-            else
-            {
-                return BadRequest("Invalid combination of parametrs");
-            }
+                (null, { } submittedOlder) => await _applicationService.GetUnsubmittedApplicationOlderDateAsync(unsubmittedOlder, cancellationToken),
+                ({ } sumittedAfter, null) => await _applicationService.GetApplicationsSubmittedAfterDateAsync(submittedAfter, cancellationToken),
+                _ => new Error("Invalid combination of parameters")
+            };
+
+            return result.ToActionResult();
         }
 
 
@@ -66,19 +60,9 @@ namespace CallForPappersService_PL.Controllers
         public async Task<ActionResult<ApplicationDto>> UpdateApplication(Guid applicationId, 
             [FromBody] ApplicationUpdateDto applicationUpdateDto, CancellationToken cancellationToken)
         {
-            //var validationResult = await _validatorUpdate.ValidateAsync(applicationUpdateDto);
-
-            //if (!validationResult.IsValid)
-            //{
-            //    var modelStateDictionary = new ModelStateDictionary();
-
-            //    validationResult.Errors
-            //        .ForEach(x => modelStateDictionary
-            //        .AddModelError(x.PropertyName, x.ErrorMessage));
-            //}
-
-            var application = await _applicationService.UpdateApplicationAsync(applicationId, applicationUpdateDto, cancellationToken);
-            return application == null ? BadRequest("Something went wrong") : Ok(application);
+            var result = await _applicationService.UpdateApplicationAsync(applicationId, applicationUpdateDto, cancellationToken);
+            
+            return result.ToActionResult();
         }
 
         [HttpPost("{applicationId}/submit")]
@@ -88,7 +72,7 @@ namespace CallForPappersService_PL.Controllers
         {
             var result = await _applicationService.SubmitApplicationAsync(applicationId, cancellationToken);
 
-            return result.IsSuccess ? Ok() : BadRequest(result.Errors);
+            return result.ToActionResult();
         }
 
         [HttpDelete("{applicationId}")]
@@ -99,7 +83,7 @@ namespace CallForPappersService_PL.Controllers
         {
             var result = await _applicationService.DeleteAplicationAsync(applicationId, cancellationToken);
 
-            return result.IsSuccess ? Ok() : BadRequest(result.Errors);
+            return result.ToActionResult();
         }
     }
 }

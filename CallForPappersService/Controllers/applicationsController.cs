@@ -22,6 +22,11 @@ namespace CallForPappersService_PL.Controllers
         [ProducesResponseType(400)]
         public async Task<ActionResult<ApplicationDto>> Create([FromBody] ApplicationCreateDto applicationCreateDto, CancellationToken cancellationToken)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
             var result = await _applicationService.CreateApplicationAsync(applicationCreateDto, cancellationToken);
 
             return result.ToActionResult();
@@ -40,18 +45,21 @@ namespace CallForPappersService_PL.Controllers
 
         [HttpGet]
         [ProducesResponseType(200)]
-        public async Task<ActionResult<List<ApplicationDto>>> GetApplication([FromQuery] DateTime? submittedAfter, [FromQuery] DateTime? unsubmittedOlder, CancellationToken cancellationToken)
+        public async Task<ActionResult<List<ApplicationDto>>> GetApplication(
+            [FromQuery] DateTime? submittedAfter, 
+            [FromQuery] DateTime? unsubmittedOlder, 
+            CancellationToken cancellationToken)
         {
             Result<List<ApplicationDto>> result = (submittedAfter, unsubmittedOlder) switch
             {
                 (null, { } submittedOlder) => await _applicationService.GetUnsubmittedApplicationOlderDateAsync(unsubmittedOlder, cancellationToken),
                 ({ } sumittedAfter, null) => await _applicationService.GetApplicationsSubmittedAfterDateAsync(submittedAfter, cancellationToken),
-                _ => new Error("Invalid combination of parameters")
+                ({ } sumittedAfter, { } submittedOlder) => new Error ("Only one parametr must be filled in"),
+                _ => new Error("One field must be filled in")
             };
 
             return result.ToActionResult();
         }
-
 
         [HttpPut("{applicationId}")]
         [ProducesResponseType(400)]
@@ -60,6 +68,11 @@ namespace CallForPappersService_PL.Controllers
         public async Task<ActionResult<ApplicationDto>> UpdateApplication(Guid applicationId, 
             [FromBody] ApplicationUpdateDto applicationUpdateDto, CancellationToken cancellationToken)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
             var result = await _applicationService.UpdateApplicationAsync(applicationId, applicationUpdateDto, cancellationToken);
             
             return result.ToActionResult();

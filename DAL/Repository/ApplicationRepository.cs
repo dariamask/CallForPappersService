@@ -13,7 +13,7 @@ namespace CallForPappersService_DAL.Repository
             _context = context;
         }
 
-        public async Task<Application> GetApplicationAsync(Guid applicationId, CancellationToken cancellationToken)
+        public async Task<Application?> GetApplicationAsync(Guid applicationId, CancellationToken cancellationToken)
         {
             return await _context.Applications
                 .Where(a => a.Id == applicationId)
@@ -66,13 +66,14 @@ namespace CallForPappersService_DAL.Repository
                 .ToListAsync(cancellationToken);
         }
 
-        public async Task<Application> GetUnsubmittedApplicationAsync(Guid authorId, CancellationToken cancellationToken)
+        public async Task<Application?> GetUnsubmittedApplicationAsync(Guid authorId, CancellationToken cancellationToken)
         {
             return await _context.Applications
                 .Where(a => a.AuthorId == authorId && a.Status == ApplicationStatus.Pending)
                 .Include (a => a.Activity)
                 .FirstOrDefaultAsync(cancellationToken);
         }
+        
         public async Task<bool> AuthorExistsAsync(Guid authorId, CancellationToken cancellationToken)
         {
             return await _context.Applications.AnyAsync(a => a.AuthorId == authorId, cancellationToken);

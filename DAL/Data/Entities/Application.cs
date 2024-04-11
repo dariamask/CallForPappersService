@@ -10,7 +10,7 @@ namespace CallForPappersService_DAL.Data.Entities
         [MaxLength(100)]
         public string Name { get; set; }
         [MaxLength(300)]
-        public string Description { get; set; }
+        public string? Description { get; set; }
         [Required]
         [MaxLength(1000)]
         public string Outline { get; set; }

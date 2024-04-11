@@ -6,13 +6,13 @@ namespace CallForPappersService_BAL.Dto
     public record ApplicationCreateDto
     {
         [JsonPropertyName("name")]
-        public string? Name { get; set; }
+        public string Name { get; set; } 
 
         [JsonPropertyName("description")]
         public string? Description { get; set; }
 
         [JsonPropertyName("outline")]
-        public string? Outline { get; set; }
+        public string Outline { get; set; }
 
         [JsonPropertyName("activity")]
         public ActivityType ActvityTypeName { get; set; }

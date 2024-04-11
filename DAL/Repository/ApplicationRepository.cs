@@ -22,10 +22,10 @@ namespace CallForPappersService_DAL.Repository
 
         }
 
-        public async Task<bool> CreateApplicationAsync(Application application, CancellationToken cancellationToken)
+        public async Task CreateApplicationAsync(Application application, CancellationToken cancellationToken)
         {
             _context.Add(application);
-            return await Save(cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
         }
 
         public async Task<bool> ApplicationExistsAsync(Guid applicationId, CancellationToken cancellationToken)
@@ -38,23 +38,16 @@ namespace CallForPappersService_DAL.Repository
             return await _context.Applications.AnyAsync(a => a.AuthorId == authorId && a.Status == ApplicationStatus.Pending, cancellationToken);
         }
 
-        //работает не так, как я ожидала. 
-        public async Task<bool> Save(CancellationToken cancellationToken)
-        {
-            var saved = await _context.SaveChangesAsync();
-            return saved > 0 ? true : false;
-        }
-
-        public async Task<bool> DeleteApplicationAsync(Application application, CancellationToken cancellationToken)
+        public async Task DeleteApplicationAsync(Application application, CancellationToken cancellationToken)
         {
             _context.Remove(application);
-            return await Save(cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<bool> UpdateApplicationAsync(Application application, CancellationToken cancellationToken)
+        public async Task UpdateApplicationAsync(Application application, CancellationToken cancellationToken)
         {
             _context.Update(application);
-            return await Save(cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
         }
 
         public async Task<List<Application>> GetUnsubmittedApplicationOlderDateAsync(DateTime? unsubmittedOlder, CancellationToken cancellationToken)

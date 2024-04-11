@@ -22,11 +22,6 @@ namespace CallForPappersService_PL.Controllers
         [ProducesResponseType(400)]
         public async Task<ActionResult<ApplicationDto>> Create([FromBody] ApplicationCreateDto applicationCreateDto, CancellationToken cancellationToken)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest();
-            }
-
             var result = await _applicationService.CreateApplicationAsync(applicationCreateDto, cancellationToken);
 
             return result.ToActionResult();
@@ -68,11 +63,6 @@ namespace CallForPappersService_PL.Controllers
         public async Task<ActionResult<ApplicationDto>> UpdateApplication(Guid applicationId, 
             [FromBody] ApplicationUpdateDto applicationUpdateDto, CancellationToken cancellationToken)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest();
-            }
-
             var result = await _applicationService.UpdateApplicationAsync(applicationId, applicationUpdateDto, cancellationToken);
             
             return result.ToActionResult();

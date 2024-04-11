@@ -7,6 +7,6 @@ namespace CallForPappersService_BAL.Services
 {
     public interface IActivityService
     {
-        public Task<Result<List<ActivityDto>>> GetActivitiesAsync();
+        public Task<Result<List<ActivityDto>>> GetActivitiesAsync(CancellationToken cancellationToken);
     }
 }

@@ -13,9 +13,9 @@ namespace CallForPappersService_BAL.Services
             _activityRepository = activityRepository;
         }
 
-        public async Task<Result<List<ActivityDto>>> GetActivitiesAsync()
+        public async Task<Result<List<ActivityDto>>> GetActivitiesAsync(CancellationToken cancellationToken)
         {
-            var activities = await _activityRepository.GetActivitiesAsync();
+            var activities = await _activityRepository.GetActivitiesAsync(cancellationToken);
 
             return activities.Select(x => new ActivityDto
             {

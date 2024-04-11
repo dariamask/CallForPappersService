@@ -17,9 +17,9 @@ namespace CallForPappersService_PL.Controllers
 
         [HttpGet]
         [ProducesResponseType(200)]
-        public async Task<ActionResult<List<ActivityDto>>> GetActivitiesAsync()
+        public async Task<ActionResult<List<ActivityDto>>> GetActivitiesAsync(CancellationToken cancellationToken)
         {
-            var result = await _activityService.GetActivitiesAsync();
+            var result = await _activityService.GetActivitiesAsync(cancellationToken);
             return result.ToActionResult();
         }
     }

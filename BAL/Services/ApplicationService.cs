@@ -40,7 +40,7 @@ namespace CallForPappersService_BAL.Services
                 return Result.Fail(validationResult.Errors.Select(failure => failure.ErrorMessage));
             }
 
-            if (await _applicationRepository.PendingApplicationExistsAsync(dto.AuthorId))
+            if (await _applicationRepository.PendingApplicationExistsAsync(dto.AuthorId, cancellationToken))
             {
                 return Result.Fail(ApplicationError.PendingAlreadyExist);
             }
@@ -54,10 +54,10 @@ namespace CallForPappersService_BAL.Services
                 CreatedDate = DateTime.Now,
                 SubmitDate = null,
                 Status = ApplicationStatus.Pending,
-                ActivityId = _activityRepository.GetActivityId(dto.ActvityTypeName),             
+                ActivityId = await _activityRepository.GetActivityIdAsync(dto.ActvityTypeName, cancellationToken),             
             };
             
-            await _applicationRepository.CreateApplicationAsync(application);
+            await _applicationRepository.CreateApplicationAsync(application, cancellationToken);
 
             return new ApplicationDto()
             {
@@ -72,12 +72,12 @@ namespace CallForPappersService_BAL.Services
 
         public async Task<Result<ApplicationDto>> GetApplicationAsync(Guid applicationId, CancellationToken cancellationToken)
         {
-            if (!await _applicationRepository.ApplicationExistsAsync(applicationId))
+            if (!await _applicationRepository.ApplicationExistsAsync(applicationId, cancellationToken))
             {
                 return Result.Fail(ApplicationError.DoesntExist);
             }
 
-            var application = await _applicationRepository.GetApplicationAsync(applicationId);
+            var application = await _applicationRepository.GetApplicationAsync(applicationId, cancellationToken);
 
             return new ApplicationDto()
             {
@@ -92,7 +92,7 @@ namespace CallForPappersService_BAL.Services
 
         public async Task<Result<List<ApplicationDto>>> GetUnsubmittedApplicationOlderDateAsync(DateTime? unsubmittedOlder, CancellationToken cancellationToken)
         {
-            var applications = await _applicationRepository.GetUnsubmittedApplicationOlderDateAsync(unsubmittedOlder);
+            var applications = await _applicationRepository.GetUnsubmittedApplicationOlderDateAsync(unsubmittedOlder, cancellationToken);
 
             return applications.Select(x => new ApplicationDto
             {
@@ -107,7 +107,7 @@ namespace CallForPappersService_BAL.Services
 
         public async Task<Result<List<ApplicationDto>>> GetApplicationsSubmittedAfterDateAsync(DateTime? submittedAfter, CancellationToken cancellationToken)
         {
-            var applications = await _applicationRepository.GetApplicationsSubmittedAfterDateAsync(submittedAfter);
+            var applications = await _applicationRepository.GetApplicationsSubmittedAfterDateAsync(submittedAfter, cancellationToken);
 
             return applications.Select(x => new ApplicationDto
             {
@@ -122,12 +122,12 @@ namespace CallForPappersService_BAL.Services
 
         public async Task<Result<ApplicationDto>> GetUnsubmittedApplicationAsync(Guid authorId, CancellationToken cancellationToken)
         {
-            if (! await _applicationRepository.AuthorExistsAsync(authorId))
+            if (! await _applicationRepository.AuthorExistsAsync(authorId, cancellationToken))
             {
                 return Result.Fail(AuthorError.DoesntExist);
             }
 
-            var application = await _applicationRepository.GetUnsubmittedApplicationAsync(authorId);
+            var application = await _applicationRepository.GetUnsubmittedApplicationAsync(authorId, cancellationToken);
 
             if (application == null)
             {
@@ -158,12 +158,12 @@ namespace CallForPappersService_BAL.Services
                 return Result.Fail(validationResult.Errors.Select(failure => failure.ErrorMessage));
             }
 
-            if (!await _applicationRepository.ApplicationExistsAsync(applicationId))
+            if (!await _applicationRepository.ApplicationExistsAsync(applicationId, cancellationToken))
             {
                 return Result.Fail(ApplicationError.DoesntExist);
             }
 
-            var application = await _applicationRepository.GetApplicationAsync(applicationId);
+            var application = await _applicationRepository.GetApplicationAsync(applicationId, cancellationToken);
   
             if (application.Status == ApplicationStatus.Active)
             {
@@ -173,9 +173,9 @@ namespace CallForPappersService_BAL.Services
             application.Name = updatedApplication.Name!;
             application.Description = updatedApplication.Description!;
             application.Outline = updatedApplication.Outline!;
-            application.ActivityId = _activityRepository.GetActivityId(updatedApplication.ActvityTypeName);
+            application.ActivityId = await _activityRepository.GetActivityIdAsync(updatedApplication.ActvityTypeName, cancellationToken);
 
-            await _applicationRepository.UpdateApplicationAsync(application);
+            await _applicationRepository.UpdateApplicationAsync(application, cancellationToken);
 
             return new ApplicationDto
             {
@@ -190,12 +190,12 @@ namespace CallForPappersService_BAL.Services
 
         public async Task<Result> SubmitApplicationAsync(Guid applicationId, CancellationToken cancellationToken)
         {
-            if (!await _applicationRepository.ApplicationExistsAsync(applicationId))
+            if (!await _applicationRepository.ApplicationExistsAsync(applicationId, cancellationToken))
             {
                 return Result.Fail(ApplicationError.DoesntExist);
             }
 
-            var application = await _applicationRepository.GetApplicationAsync(applicationId);
+            var application = await _applicationRepository.GetApplicationAsync(applicationId, cancellationToken);
 
             if ( application.Status is ApplicationStatus.Active )
             {
@@ -205,26 +205,26 @@ namespace CallForPappersService_BAL.Services
             application.Status = ApplicationStatus.Active;
             application.SubmitDate = DateTime.Now;
 
-            await _applicationRepository.UpdateApplicationAsync(application);
+            await _applicationRepository.UpdateApplicationAsync(application, cancellationToken);
 
             return Result.Ok();
         }
 
         public async Task<Result> DeleteAplicationAsync(Guid applicationId, CancellationToken cancellationToken)
         {
-            if (!await _applicationRepository.ApplicationExistsAsync(applicationId))
+            if (!await _applicationRepository.ApplicationExistsAsync(applicationId, cancellationToken))
             {
                 return Result.Fail(ApplicationError.DoesntExist);
             }
 
-            var application = await _applicationRepository.GetApplicationAsync(applicationId);
+            var application = await _applicationRepository.GetApplicationAsync(applicationId, cancellationToken);
 
             if (application.Status == ApplicationStatus.Active)
             {
                 return Result.Fail(ApplicationError.CantDeleteActive);
             }
             
-            await _applicationRepository.DeleteApplicationAsync(application);
+            await _applicationRepository.DeleteApplicationAsync(application, cancellationToken);
 
             return Result.Ok();
         }

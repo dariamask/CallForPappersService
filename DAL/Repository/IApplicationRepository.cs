@@ -6,15 +6,15 @@ namespace CallForPappersService_DAL.Repository
 {
     public interface IApplicationRepository
     {
-        Task<Application> GetApplicationAsync(Guid applicationId);
-        Task<bool> PendingApplicationExistsAsync(Guid authorId);
-        Task<bool> ApplicationExistsAsync(Guid applicationId);
-        Task<bool> CreateApplicationAsync(Application application);
-        Task<bool> UpdateApplicationAsync(Application application);
-        Task<bool> DeleteApplicationAsync(Application application);
-        Task<List<Application>> GetUnsubmittedApplicationOlderDateAsync(DateTime? unsubmittedOlder);
-        Task<List<Application>> GetApplicationsSubmittedAfterDateAsync(DateTime? submittedAfter);
-        Task<Application> GetUnsubmittedApplicationAsync(Guid authorId);
-        Task<bool> AuthorExistsAsync(Guid authorId);
+        Task<Application> GetApplicationAsync(Guid applicationId, CancellationToken cancellationToken);
+        Task<bool> PendingApplicationExistsAsync(Guid authorId, CancellationToken cancellationToken);
+        Task<bool> ApplicationExistsAsync(Guid applicationId, CancellationToken cancellationToken);
+        Task<bool> CreateApplicationAsync(Application application, CancellationToken cancellationToken);
+        Task<bool> UpdateApplicationAsync(Application application, CancellationToken cancellationToken);
+        Task<bool> DeleteApplicationAsync(Application application, CancellationToken cancellationToken);
+        Task<List<Application>> GetUnsubmittedApplicationOlderDateAsync(DateTime? unsubmittedOlder, CancellationToken cancellationToken);
+        Task<List<Application>> GetApplicationsSubmittedAfterDateAsync(DateTime? submittedAfter, CancellationToken cancellationToken);
+        Task<Application> GetUnsubmittedApplicationAsync(Guid authorId, CancellationToken cancellationToken);
+        Task<bool> AuthorExistsAsync(Guid authorId, CancellationToken cancellationToken);
     }
 }

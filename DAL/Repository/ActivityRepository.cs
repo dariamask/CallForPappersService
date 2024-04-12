@@ -29,7 +29,7 @@ namespace CallForPappersService_DAL.Repository
 
         public async Task<Guid> GetActivityIdAsync(ActivityType activityType, CancellationToken cancellationToken)
         {
-            var activity = await (_context.Activities.FirstOrDefaultAsync(a => a.ActivityType == activityType, cancellationToken));
+            Activity? activity = await _context.Activities.FirstOrDefaultAsync(a => a.ActivityType == activityType, cancellationToken);
             return activity.Id;
         }
     }

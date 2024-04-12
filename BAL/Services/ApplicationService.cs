@@ -35,8 +35,6 @@ namespace CallForPappersService_BAL.Services
 
             if (!validationResult.IsValid)
             {
-                var result = new List<IError>();
-
                 return Result.Fail(validationResult.Errors.Select(failure => failure.ErrorMessage));
             }
 
@@ -148,8 +146,6 @@ namespace CallForPappersService_BAL.Services
 
             if (!validationResult.IsValid)
             {
-                var result = new List<IError>();
-
                 return Result.Fail(validationResult.Errors.Select(failure => failure.ErrorMessage));
             }
 

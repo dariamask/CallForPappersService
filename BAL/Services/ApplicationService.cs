@@ -47,10 +47,10 @@ namespace CallForPappersService_BAL.Services
 
             var application = new Application
             {
-                AuthorId = dto.AuthorId!,
-                Name = dto.Name!,
-                Description = dto.Description!,
-                Outline = dto.Outline!,
+                AuthorId = dto.AuthorId,
+                Name = dto.Name,
+                Description = dto.Description,
+                Outline = dto.Outline,
                 CreatedDate = DateTime.Now,
                 SubmitDate = null,
                 Status = ApplicationStatus.Pending,
@@ -84,9 +84,9 @@ namespace CallForPappersService_BAL.Services
                 Id = application.Id,
                 AuthorId = application.AuthorId,
                 ActvityTypeName = application.Activity.ActivityType,
-                Name = application.Name!,
-                Description = application.Description!,
-                Outline = application.Outline!,
+                Name = application.Name,
+                Description = application.Description,
+                Outline = application.Outline,
             };
         }
 
@@ -99,9 +99,9 @@ namespace CallForPappersService_BAL.Services
                 Id = x.Id,
                 AuthorId = x.AuthorId,
                 ActvityTypeName = x.Activity.ActivityType,
-                Name = x.Name!,
-                Description = x.Description!,
-                Outline = x.Outline!,
+                Name = x.Name,
+                Description = x.Description,
+                Outline = x.Outline,
             }).ToList();
         }
 
@@ -114,9 +114,9 @@ namespace CallForPappersService_BAL.Services
                 Id = x.Id,
                 AuthorId = x.AuthorId,
                 ActvityTypeName = x.Activity.ActivityType,
-                Name = x.Name!,
-                Description = x.Description!,
-                Outline = x.Outline!,
+                Name = x.Name,
+                Description = x.Description,
+                Outline = x.Outline,
             }).ToList();
         }
 
@@ -124,22 +124,22 @@ namespace CallForPappersService_BAL.Services
         {
             var application = await _applicationRepository.GetUnsubmittedApplicationAsync(authorId, cancellationToken);
 
-            //if (application == null)
-            //{
-            return Result.Fail(AuthorError.DoesntExist);
-            //}
-            //else
-            //{
-                //return new ApplicationDto()
-                //{
-                //    Id = application.Id,
-                //    AuthorId = application.AuthorId,
-                //    ActvityTypeName = application.Activity.ActivityType,
-                //    Name = application.Name!,
-                //    Description = application.Description!,
-                //    Outline = application.Outline!,
-                //};
-            //}
+            if (application == null)
+            {
+                return Result.Fail(AuthorError.DoesntExist);
+            }
+            else
+            {
+                return new ApplicationDto()
+                {
+                    Id = application.Id,
+                    AuthorId = application.AuthorId,
+                    ActvityTypeName = application.Activity.ActivityType,
+                    Name = application.Name,
+                    Description = application.Description,
+                    Outline = application.Outline,
+                };
+            }
         }
 
         public async Task<Result<ApplicationDto>> UpdateApplicationAsync(Guid applicationId, ApplicationUpdateDto updatedApplication, CancellationToken cancellationToken)
@@ -177,9 +177,9 @@ namespace CallForPappersService_BAL.Services
                 Id = application.Id,
                 AuthorId = application.AuthorId,
                 ActvityTypeName = application.Activity.ActivityType,
-                Name = application.Name!,
-                Description = application.Description!,
-                Outline = application.Outline!,
+                Name = application.Name,
+                Description = application.Description,
+                Outline = application.Outline,
             };
         }
 
@@ -223,6 +223,5 @@ namespace CallForPappersService_BAL.Services
 
             return Result.Ok();
         }
-
     }
 }

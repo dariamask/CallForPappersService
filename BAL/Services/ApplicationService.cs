@@ -3,11 +3,8 @@ using CallForPappersService_DAL.Data.Entities;
 using CallForPappersService_DAL.Repository;
 using CallForPappersService_BAL.Validations.Result;
 using CallForPappersService_BAL.Dto;
-using System.ComponentModel.DataAnnotations;
-using System.Web.Http.ModelBinding;
-using System.Reflection.Metadata.Ecma335;
 using FluentResults;
-using Error = FluentResults.Error;
+
 
 namespace CallForPappersService_BAL.Services
 {
@@ -17,17 +14,19 @@ namespace CallForPappersService_BAL.Services
         private readonly IActivityRepository _activityRepository;
         private readonly IValidator<ApplicationCreateDto> _validatorCreate;
         private readonly IValidator<ApplicationUpdateDto> _validatorUpdate;
-        private readonly IValidator<Application> _validatorSubmit;
+        private readonly IValidator<ApplicationSubmitDto> _validatorSubmit;
 
         public ApplicationService(IApplicationRepository applicationRepository, 
             IActivityRepository activityRepository, 
             IValidator<ApplicationCreateDto> validatorCreate,
-            IValidator<ApplicationUpdateDto> validatorUpdate)
+            IValidator<ApplicationUpdateDto> validatorUpdate,
+            IValidator<ApplicationSubmitDto> validatorSubmit)
         {
             _applicationRepository = applicationRepository;
             _activityRepository = activityRepository;
             _validatorCreate = validatorCreate;
             _validatorUpdate = validatorUpdate;
+            _validatorSubmit = validatorSubmit;
         }
        
         public async Task<Result<ApplicationDto>> CreateApplicationAsync(ApplicationCreateDto dto, CancellationToken cancellationToken)
@@ -193,7 +192,13 @@ namespace CallForPappersService_BAL.Services
                 return Result.Fail(ApplicationError.DoesntExist);
             }
 
-            var validationResult = await _validatorSubmit.ValidateAsync(application, cancellationToken);
+            var app = new ApplicationSubmitDto()
+            {
+                Name = application.Name,
+                Description = application.Description,
+                Outline = application.Outline
+            };
+            var validationResult = await _validatorSubmit.ValidateAsync(app, cancellationToken);
 
             if (!validationResult.IsValid)
             {

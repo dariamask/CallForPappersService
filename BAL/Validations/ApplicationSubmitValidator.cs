@@ -1,4 +1,5 @@
-﻿using CallForPappersService_DAL.Data.Entities;
+﻿using CallForPappersService_BAL.Dto;
+using CallForPappersService_DAL.Data.Entities;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
@@ -8,13 +9,12 @@ using System.Threading.Tasks;
 
 namespace CallForPappersService_BAL.Validations
 {
-    internal class ApplicationSubmitValidator : AbstractValidator<Application>
+    public class ApplicationSubmitValidator : AbstractValidator<ApplicationSubmitDto>
     {
         public ApplicationSubmitValidator() 
         { 
-            RuleFor(x => x.AuthorId).NotEmpty();
-            RuleFor(x => x.Name).NotEmpty();
-            RuleFor(x => x.Outline).NotEmpty();
+            RuleFor(x => x.Name).NotEmpty().When(m => m.Name != null);
+            RuleFor(x => x.Outline).NotEmpty().When(m => m.Outline != null);
         }
     }
 }

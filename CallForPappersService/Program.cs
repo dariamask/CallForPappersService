@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using System.Text.Json.Serialization;
 using CallForPappersService_DAL.Data;
 using CallForPappersService_BAL.Dto;
+using CallForPappersService_DAL.Data.Entities;
 
 namespace CallForPappersService_PL
 {
@@ -36,6 +37,7 @@ namespace CallForPappersService_PL
             
             builder.Services.AddScoped<IValidator<ApplicationCreateDto>, ApplicationCreateDtoValidator>();
             builder.Services.AddScoped<IValidator<ApplicationUpdateDto>, ApplicationUpdateDtoValidator>();
+            builder.Services.AddScoped<IValidator<ApplicationSubmitDto>, ApplicationSubmitValidator>();
 
             var app = builder.Build();
 

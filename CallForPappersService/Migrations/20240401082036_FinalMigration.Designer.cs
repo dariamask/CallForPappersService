@@ -30,7 +30,7 @@ namespace CallForPappersService.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("ActivityType")
+                    b.Property<int>("Type")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")

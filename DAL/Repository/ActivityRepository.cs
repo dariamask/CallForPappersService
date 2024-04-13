@@ -16,11 +16,5 @@ namespace CallForPappersService_DAL.Repository
         {
             return await _context.Activities.ToListAsync(cancellationToken);
         }
-
-        public async Task<Activity> GetActivityAsync(ActivityType activityType, CancellationToken cancellationToken)
-        {
-            return await _context.Activities.FirstOrDefaultAsync(a => a.ActivityType == activityType, cancellationToken);
-                
-        }
     }
 }

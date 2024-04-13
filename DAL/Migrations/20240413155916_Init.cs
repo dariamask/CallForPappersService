@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CallForPappersService_DAL.Migrations
 {
-    public partial class InitSQL : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,12 +13,12 @@ namespace CallForPappersService_DAL.Migrations
                 name: "Activities",
                 columns: table => new
                 {
-                    ActivityType = table.Column<int>(type: "integer", nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: true)
+                    Type = table.Column<int>(type: "integer", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Activities", x => x.ActivityType);
+                    table.PrimaryKey("PK_Activities", x => x.Type);
                 });
 
             migrationBuilder.CreateTable(
@@ -42,13 +42,13 @@ namespace CallForPappersService_DAL.Migrations
                         name: "FK_Applications_Activities_ActivityType",
                         column: x => x.ActivityType,
                         principalTable: "Activities",
-                        principalColumn: "ActivityType",
+                        principalColumn: "Type",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
                 table: "Activities",
-                columns: new[] { "ActivityType", "Description" },
+                columns: new[] { "Type", "Description" },
                 values: new object[,]
                 {
                     { 0, "Доклад, 35-45 минут" },

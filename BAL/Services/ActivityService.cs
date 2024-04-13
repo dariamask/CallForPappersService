@@ -19,7 +19,7 @@ namespace CallForPappersService_BAL.Services
 
             return activities.Select(x => new ActivityDto
             {
-                ActivityType = x.ActivityType,
+                ActivityType = x.Type,
                 Description = x.Description!,
             }).ToList();
         }

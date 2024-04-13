@@ -49,10 +49,10 @@ namespace CallForPappersService_BAL.Services
                 Name = dto.Name,
                 Description = dto.Description,
                 Outline = dto.Outline,
-                CreatedDate = DateTime.Now,
+                CreatedDate = DateTime.UtcNow,
                 SubmitDate = null,
                 Status = ApplicationStatus.Pending,
-                Activity = await _activityRepository.GetActivityAsync(dto.ActvityTypeName, cancellationToken),
+                ActivityType = ActivityType.Discussion
             };
             
             await _applicationRepository.CreateApplicationAsync(application, cancellationToken);
@@ -61,7 +61,7 @@ namespace CallForPappersService_BAL.Services
             {
                 Id = application.Id,
                 AuthorId = application.AuthorId,
-                ActvityTypeName = application.Activity.ActivityType,              
+                ActvityTypeName = application.ActivityType,          
                 Name = application.Name,
                 Description = application.Description,
                 Outline = application.Outline,
@@ -70,7 +70,7 @@ namespace CallForPappersService_BAL.Services
 
         public async Task<Result<ApplicationDto>> GetApplicationAsync(Guid applicationId, CancellationToken cancellationToken)
         {
-            var application = await _applicationRepository.GetApplicationAsync(applicationId, cancellationToken);
+            var application = await _applicationRepository.GetApplicationByApplicationIdAsync(applicationId, cancellationToken);
 
             if (application is null)
             {
@@ -81,7 +81,7 @@ namespace CallForPappersService_BAL.Services
             {
                 Id = application.Id,
                 AuthorId = application.AuthorId,
-                ActvityTypeName = application.Activity.ActivityType,
+                ActvityTypeName = application.Activity.Type,
                 Name = application.Name,
                 Description = application.Description,
                 Outline = application.Outline,
@@ -96,7 +96,7 @@ namespace CallForPappersService_BAL.Services
             {
                 Id = x.Id,
                 AuthorId = x.AuthorId,
-                ActvityTypeName = x.Activity.ActivityType,
+                ActvityTypeName = x.Activity.Type,
                 Name = x.Name,
                 Description = x.Description,
                 Outline = x.Outline,
@@ -111,7 +111,7 @@ namespace CallForPappersService_BAL.Services
             {
                 Id = x.Id,
                 AuthorId = x.AuthorId,
-                ActvityTypeName = x.Activity.ActivityType,
+                ActvityTypeName = x.Activity.Type,
                 Name = x.Name,
                 Description = x.Description,
                 Outline = x.Outline,
@@ -120,11 +120,15 @@ namespace CallForPappersService_BAL.Services
 
         public async Task<Result<ApplicationDto>> GetUnsubmittedApplicationAsync(Guid authorId, CancellationToken cancellationToken)
         {
-            var application = await _applicationRepository.GetUnsubmittedApplicationAsync(authorId, cancellationToken);
+            var application = await _applicationRepository.GetApplicationByAuthorIdAsync(authorId, cancellationToken);
 
             if (application == null)
             {
                 return Result.Fail(AuthorError.DoesntExist);
+            }
+            else if (application.Status != ApplicationStatus.Pending)
+            {
+                return Result.Fail(ApplicationError.NoUnsubmitted);
             }
             else
             {
@@ -132,7 +136,7 @@ namespace CallForPappersService_BAL.Services
                 {
                     Id = application.Id,
                     AuthorId = application.AuthorId,
-                    ActvityTypeName = application.Activity.ActivityType,
+                    ActvityTypeName = application.Activity.Type,
                     Name = application.Name,
                     Description = application.Description,
                     Outline = application.Outline,
@@ -149,7 +153,7 @@ namespace CallForPappersService_BAL.Services
                 return Result.Fail(validationResult.Errors.Select(failure => failure.ErrorMessage));
             }
 
-            var application = await _applicationRepository.GetApplicationAsync(applicationId, cancellationToken);
+            var application = await _applicationRepository.GetApplicationByApplicationIdAsync(applicationId, cancellationToken);
 
             if (application == null)
             {
@@ -164,8 +168,7 @@ namespace CallForPappersService_BAL.Services
             application.Name = updatedApplication.Name ?? application.Name;
             application.Description = updatedApplication.Description ?? application.Description;
             application.Outline = updatedApplication.Outline ?? application.Outline;
-            application.Activity = await _activityRepository.GetActivityAsync(updatedApplication.ActvityTypeName, cancellationToken)
-                                   ?? application.Activity;
+            application.ActivityType = updatedApplication.ActvityTypeName;
 
             await _applicationRepository.UpdateApplicationAsync(application, cancellationToken);
 
@@ -173,7 +176,7 @@ namespace CallForPappersService_BAL.Services
             {
                 Id = application.Id,
                 AuthorId = application.AuthorId,
-                ActvityTypeName = application.Activity.ActivityType,
+                ActvityTypeName = application.Activity.Type,
                 Name = application.Name,
                 Description = application.Description,
                 Outline = application.Outline,
@@ -182,7 +185,7 @@ namespace CallForPappersService_BAL.Services
 
         public async Task<Result> SubmitApplicationAsync(Guid applicationId, CancellationToken cancellationToken)
         {
-            var application = await _applicationRepository.GetApplicationAsync(applicationId, cancellationToken);
+            var application = await _applicationRepository.GetApplicationByApplicationIdAsync(applicationId, cancellationToken);
 
             if (application == null)
             {
@@ -195,7 +198,7 @@ namespace CallForPappersService_BAL.Services
             }
             
             application.Status = ApplicationStatus.Active;
-            application.SubmitDate = DateTime.Now;
+            application.SubmitDate = DateTime.UtcNow;
 
             await _applicationRepository.UpdateApplicationAsync(application, cancellationToken);
 
@@ -204,7 +207,7 @@ namespace CallForPappersService_BAL.Services
 
         public async Task<Result> DeleteAplicationAsync(Guid applicationId, CancellationToken cancellationToken)
         {
-            var application = await _applicationRepository.GetApplicationAsync(applicationId, cancellationToken);
+            var application = await _applicationRepository.GetApplicationByApplicationIdAsync(applicationId, cancellationToken);
 
             if (application == null)
             {

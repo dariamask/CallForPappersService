@@ -6,6 +6,5 @@ namespace CallForPappersService_DAL.Repository
     public interface IActivityRepository
     {
         Task<ICollection<Activity>> GetActivitiesAsync(CancellationToken cancellationToken);
-        Task<Activity?> GetActivityAsync(ActivityType activityType, CancellationToken cancellationToken);
     }
 }

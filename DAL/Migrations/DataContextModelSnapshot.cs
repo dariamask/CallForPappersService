@@ -24,30 +24,31 @@ namespace CallForPappersService_DAL.Migrations
 
             modelBuilder.Entity("CallForPappersService_DAL.Data.Entities.Activity", b =>
                 {
-                    b.Property<int>("ActivityType")
+                    b.Property<int>("Type")
                         .HasColumnType("integer");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("ActivityType");
+                    b.HasKey("Type");
 
                     b.ToTable("Activities");
 
                     b.HasData(
                         new
                         {
-                            ActivityType = 0,
+                            Type = 0,
                             Description = "Доклад, 35-45 минут"
                         },
                         new
                         {
-                            ActivityType = 2,
+                            Type = 2,
                             Description = "Дискуссия / круглый стол, 40-50 минут"
                         },
                         new
                         {
-                            ActivityType = 1,
+                            Type = 1,
                             Description = "Мастеркласс, 1-2 часа"
                         });
                 });

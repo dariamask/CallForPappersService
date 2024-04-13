@@ -15,10 +15,11 @@ namespace CallForPappersService_DAL.Repository
 
         public async Task<Application?> GetApplicationByApplicationIdAsync(Guid applicationId, CancellationToken cancellationToken)
         {
-            return await _context.Applications
+            var aoo = await _context.Applications
                 .Where(a => a.Id == applicationId)
                 .Include(a => a.Activity)
                 .FirstOrDefaultAsync(cancellationToken);
+            return aoo;
         }
         public async Task<Application?> GetApplicationByAuthorIdAsync(Guid authorId, CancellationToken cancellationToken)
         {
@@ -59,7 +60,7 @@ namespace CallForPappersService_DAL.Repository
         public async Task<List<Application>> GetUnsubmittedApplicationOlderDateAsync(DateTime? unsubmittedOlder, CancellationToken cancellationToken)
         {
             return await _context.Applications
-                .Where(a => a.CreatedDate > unsubmittedOlder && a.Status == ApplicationStatus.Pending)
+                .Where(a => a.CreatedDate < unsubmittedOlder && a.Status == ApplicationStatus.Pending)
                 .Include(a => a.Activity)          
                 .ToListAsync(cancellationToken);
         }
@@ -71,18 +72,5 @@ namespace CallForPappersService_DAL.Repository
                 .Include(a => a.Activity)
                 .ToListAsync(cancellationToken);
         }
-
-        //public async Task<Application?> GetUnsubmittedApplicationAsync(Guid authorId, CancellationToken cancellationToken)
-        //{
-        //    return await _context.Applications
-        //        .Where(a => a.AuthorId == authorId && a.Status == ApplicationStatus.Pending)
-        //        .Include (a => a.Activity)
-        //        .FirstOrDefaultAsync(cancellationToken);
-        //}
-        
-        //public async Task<bool> AuthorExistsAsync(Guid authorId, CancellationToken cancellationToken)
-        //{
-        //    return await _context.Applications.AnyAsync(a => a.AuthorId == authorId, cancellationToken);
-        //}
     }
 }

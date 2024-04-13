@@ -5,8 +5,6 @@ namespace CallForPappersService_BAL.Dto
 {
     public class ActivityDto
     {
-        public Guid Id { get; set; }
-
         public ActivityType ActivityType { get; set; }
 
         public string Description { get; set; }

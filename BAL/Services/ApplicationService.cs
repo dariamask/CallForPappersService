@@ -17,6 +17,7 @@ namespace CallForPappersService_BAL.Services
         private readonly IActivityRepository _activityRepository;
         private readonly IValidator<ApplicationCreateDto> _validatorCreate;
         private readonly IValidator<ApplicationUpdateDto> _validatorUpdate;
+        private readonly IValidator<Application> _validatorSubmit;
 
         public ApplicationService(IApplicationRepository applicationRepository, 
             IActivityRepository activityRepository, 
@@ -52,7 +53,7 @@ namespace CallForPappersService_BAL.Services
                 CreatedDate = DateTime.UtcNow,
                 SubmitDate = null,
                 Status = ApplicationStatus.Pending,
-                ActivityType = ActivityType.Discussion
+                ActivityType = dto.ActvityTypeName
             };
             
             await _applicationRepository.CreateApplicationAsync(application, cancellationToken);
@@ -176,7 +177,7 @@ namespace CallForPappersService_BAL.Services
             {
                 Id = application.Id,
                 AuthorId = application.AuthorId,
-                ActvityTypeName = application.Activity.Type,
+                ActvityTypeName = application.ActivityType,
                 Name = application.Name,
                 Description = application.Description,
                 Outline = application.Outline,
@@ -192,11 +193,18 @@ namespace CallForPappersService_BAL.Services
                 return Result.Fail(ApplicationError.DoesntExist);
             }
 
+            var validationResult = await _validatorSubmit.ValidateAsync(application, cancellationToken);
+
+            if (!validationResult.IsValid)
+            {
+                return Result.Fail(validationResult.Errors.Select(failure => failure.ErrorMessage));
+            }
+
             if ( application.Status is ApplicationStatus.Active )
             {
                 return Result.Fail(ApplicationError.CantUpdateActive);
             }
-            
+
             application.Status = ApplicationStatus.Active;
             application.SubmitDate = DateTime.UtcNow;
 

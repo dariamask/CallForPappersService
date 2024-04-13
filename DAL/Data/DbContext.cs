@@ -16,6 +16,11 @@ namespace CallForPappersService_DAL.Data
             modelBuilder.Entity<Application>().HasIndex(a => a.AuthorId);
             modelBuilder.Entity<Application>().HasIndex(a => a.Status);
 
+            modelBuilder.Entity<Activity>().HasData(
+                new Activity { ActivityType = ActivityType.Report, Description = "Доклад, 35-45 минут" },
+                new Activity { ActivityType = ActivityType.Discussion, Description = "Дискуссия / круглый стол, 40-50 минут" },
+                new Activity { ActivityType = ActivityType.MasterClass, Description = "Мастеркласс, 1-2 часа" });
+
             modelBuilder.Entity<Application>()
                 .Property(x => x.Name).HasMaxLength(100).IsRequired();
             modelBuilder.Entity<Application>()
@@ -24,8 +29,6 @@ namespace CallForPappersService_DAL.Data
                 .Property(x => x.Outline).HasMaxLength(1000).IsRequired();
             modelBuilder.Entity<Application>()
                 .Property(x => x.AuthorId).IsRequired();
-            modelBuilder.Entity<Application>()
-                .Property(x => x.ActivityId).IsRequired();
         }
     }
 }

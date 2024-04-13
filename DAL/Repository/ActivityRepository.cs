@@ -17,20 +17,10 @@ namespace CallForPappersService_DAL.Repository
             return await _context.Activities.ToListAsync(cancellationToken);
         }
 
-        public async Task<Activity?> GetActivityAsync(ActivityType activityType, CancellationToken cancellationToken)
+        public async Task<Activity> GetActivityAsync(ActivityType activityType, CancellationToken cancellationToken)
         {
             return await _context.Activities.FirstOrDefaultAsync(a => a.ActivityType == activityType, cancellationToken);
-        }
-
-        public async Task<Activity?> GetActivityAsync(Guid activityId, CancellationToken cancellationToken)
-        {
-            return await _context.Activities.FirstOrDefaultAsync(a => a.Id == activityId, cancellationToken);
-        }
-
-        public async Task<Guid> GetActivityIdAsync(ActivityType activityType, CancellationToken cancellationToken)
-        {
-            Activity? activity = await _context.Activities.FirstOrDefaultAsync(a => a.ActivityType == activityType, cancellationToken);
-            return activity.Id;
+                
         }
     }
 }

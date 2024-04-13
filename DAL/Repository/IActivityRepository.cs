@@ -7,7 +7,5 @@ namespace CallForPappersService_DAL.Repository
     {
         Task<ICollection<Activity>> GetActivitiesAsync(CancellationToken cancellationToken);
         Task<Activity?> GetActivityAsync(ActivityType activityType, CancellationToken cancellationToken);
-        Task<Activity?> GetActivityAsync(Guid activityId, CancellationToken cancellationToken);
-        Task<Guid> GetActivityIdAsync(ActivityType activityType, CancellationToken cancellationToken);
     }
 }

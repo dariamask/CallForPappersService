@@ -1,12 +1,14 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace CallForPappersService_DAL.Data.Entities
 {
     public class Activity
     {
-        public Guid Id { get; set; }
+        [Key]
         public ActivityType ActivityType { get; set; }
-        public string? Description { get; set; }
+        public string Description { get; set; }
+        public List<Application> Applications { get; set; }
     }
 
     public enum ActivityType

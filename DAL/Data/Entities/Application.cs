@@ -12,7 +12,6 @@ namespace CallForPappersService_DAL.Data.Entities
         public DateTime? SubmitDate { get; set; }
         public ApplicationStatus Status { get; set; }
         public Guid AuthorId { get; set; }
-        public Guid ActivityId { get; set; }
         public Activity Activity { get; set; }
     }
 

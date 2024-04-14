@@ -8,7 +8,6 @@ namespace CallForPappersService_DAL.Repository
     {
         Task<Application?> GetApplicationByApplicationIdAsync(Guid applicationId, CancellationToken cancellationToken);
         Task<Application?> GetApplicationByAuthorIdAsync(Guid applicationId, CancellationToken cancellationToken);
-
         Task<bool> PendingApplicationExistsAsync(Guid authorId, CancellationToken cancellationToken);
         Task<bool> ApplicationExistsAsync(Guid applicationId, CancellationToken cancellationToken);
         Task CreateApplicationAsync(Application application, CancellationToken cancellationToken);

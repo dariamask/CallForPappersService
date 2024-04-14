@@ -198,6 +198,7 @@ namespace CallForPappersService_BAL.Services
                 Description = application.Description,
                 Outline = application.Outline
             };
+
             var validationResult = await _validatorSubmit.ValidateAsync(app, cancellationToken);
 
             if (!validationResult.IsValid)

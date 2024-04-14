@@ -41,6 +41,12 @@ namespace CallForPappersService_PL
 
             var app = builder.Build();
 
+            using (var scope = app.Services.CreateScope())
+            {
+                var db = scope.ServiceProvider.GetRequiredService<DataContext>();
+                db.Database.Migrate();
+            }
+
             app.UseMiddleware<CancellationHandlingMiddleware>();
 
             if (app.Environment.IsDevelopment())

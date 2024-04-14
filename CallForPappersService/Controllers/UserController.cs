@@ -6,12 +6,12 @@ using System.Runtime.CompilerServices;
 
 namespace CallForPappersService_PL.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("users")]
     [ApiController]
-    public class usersController : Controller
+    public class UserController : Controller
     {
         private readonly IApplicationService _applicationService;
-        public usersController(IApplicationService applicationService)
+        public UserController(IApplicationService applicationService)
         {
             _applicationService = applicationService;
         }

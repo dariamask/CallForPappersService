@@ -7,12 +7,12 @@ using FluentResults;
 
 namespace CallForPappersService_PL.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("applications")]
     [ApiController]
-    public class applicationsController : Controller
+    public class ApplicationController : Controller
     {
         private readonly IApplicationService _applicationService;
-        public applicationsController(IApplicationService applicationService)
+        public ApplicationController(IApplicationService applicationService)
         {
             _applicationService = applicationService;
         }

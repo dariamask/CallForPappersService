@@ -5,12 +5,12 @@ using FluentResults.Extensions.AspNetCore;
 
 namespace CallForPappersService_PL.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("activities")]
     [ApiController]
-    public class activitiesController : Controller
+    public class ActivityController : Controller
     {
         private readonly IActivityService _activityService;
-        public activitiesController(IActivityService activityService)
+        public ActivityController(IActivityService activityService)
         {
             _activityService = activityService;
         }

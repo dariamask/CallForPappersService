@@ -10,9 +10,9 @@ namespace CallForPappersService_BAL.Validations.Result
         public static readonly Error CantUpdateActive = new ("Can't update application if it is already submitted");
         public static readonly Error CantDeleteActive = new("Can't delete application if it is already submitted");
 
-        public List<IError> Reasons => throw new NotImplementedException();
-        public string Message => throw new NotImplementedException();
-        public Dictionary<string, object> Metadata => throw new NotImplementedException();
+        public List<IError> Reasons => new List<IError>();
+        public string Message => string.Empty;
+        public Dictionary<string, object> Metadata => new Dictionary<string, object>();
     }
 }   
 

@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CallForPappersService_DAL.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240413155916_Init")]
+    [Migration("20240415060823_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -75,12 +75,10 @@ namespace CallForPappersService_DAL.Migrations
                         .HasColumnType("character varying(300)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
                     b.Property<string>("Outline")
-                        .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("character varying(1000)");
 

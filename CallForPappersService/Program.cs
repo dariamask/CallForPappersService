@@ -37,7 +37,6 @@ namespace CallForPappersService_PL
             
             builder.Services.AddScoped<IValidator<ApplicationCreateDto>, ApplicationCreateDtoValidator>();
             builder.Services.AddScoped<IValidator<ApplicationUpdateDto>, ApplicationUpdateDtoValidator>();
-            builder.Services.AddScoped<IValidator<ApplicationSubmitDto>, ApplicationSubmitValidator>();
 
             var app = builder.Build();
 

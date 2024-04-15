@@ -7,7 +7,7 @@ namespace CallForPappersService_DAL.Data.Entities
     {
         public ActivityType Type { get; set; }
         public string Description { get; set; } = null!;
-        public List<Application> Applications { get; set; }
+        public List<Application> Applications { get; set; } //= [];
     }
 
     public enum ActivityType

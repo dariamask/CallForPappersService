@@ -26,9 +26,9 @@ namespace CallForPappersService_DAL.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
                     Description = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: true),
-                    Outline = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: false),
+                    Outline = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     SubmitDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     Status = table.Column<int>(type: "integer", nullable: false),

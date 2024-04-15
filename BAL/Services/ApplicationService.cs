@@ -14,19 +14,16 @@ namespace CallForPappersService_BAL.Services
         private readonly IActivityRepository _activityRepository;
         private readonly IValidator<ApplicationCreateDto> _validatorCreate;
         private readonly IValidator<ApplicationUpdateDto> _validatorUpdate;
-        private readonly IValidator<ApplicationSubmitDto> _validatorSubmit;
 
         public ApplicationService(IApplicationRepository applicationRepository, 
             IActivityRepository activityRepository, 
             IValidator<ApplicationCreateDto> validatorCreate,
-            IValidator<ApplicationUpdateDto> validatorUpdate,
-            IValidator<ApplicationSubmitDto> validatorSubmit)
+            IValidator<ApplicationUpdateDto> validatorUpdate)
         {
             _applicationRepository = applicationRepository;
             _activityRepository = activityRepository;
             _validatorCreate = validatorCreate;
             _validatorUpdate = validatorUpdate;
-            _validatorSubmit = validatorSubmit;
         }
        
         public async Task<Result<ApplicationDto>> CreateApplicationAsync(ApplicationCreateDto dto, CancellationToken cancellationToken)
@@ -40,7 +37,7 @@ namespace CallForPappersService_BAL.Services
 
             if (await _applicationRepository.PendingApplicationExistsAsync(dto.AuthorId, cancellationToken))
             {
-                return Result.Fail(ApplicationError.PendingAlreadyExist);
+                return Result.Fail(Validations.Result.Errors.PendingAlreadyExist);
             }
 
             var application = new Application
@@ -74,7 +71,7 @@ namespace CallForPappersService_BAL.Services
 
             if (application is null)
             {
-                return Result.Fail(ApplicationError.DoesntExist);
+                return Result.Fail(Validations.Result.Errors.ApplicationDoesntExist);
             }
 
             return new ApplicationDto()
@@ -124,11 +121,11 @@ namespace CallForPappersService_BAL.Services
 
             if (application == null)
             {
-                return Result.Fail(AuthorError.DoesntExist);
+                return Result.Fail(Errors.AuthorDoesntExist);
             }
             else if (application.Status != ApplicationStatus.Pending)
             {
-                return Result.Fail(ApplicationError.NoUnsubmitted);
+                return Result.Fail(Validations.Result.Errors.NoUnsubmitted);
             }
             else
             {
@@ -157,12 +154,12 @@ namespace CallForPappersService_BAL.Services
 
             if (application == null)
             {
-                return Result.Fail(ApplicationError.DoesntExist);
+                return Result.Fail(Validations.Result.Errors.ApplicationDoesntExist);
             }
 
             if (application.Status == ApplicationStatus.Active)
             {
-                return Result.Fail(ApplicationError.CantUpdateActive);
+                return Result.Fail(Validations.Result.Errors.CantUpdateActive);
             }
            
             application.Name = updatedApplication.Name ?? application.Name;
@@ -189,26 +186,18 @@ namespace CallForPappersService_BAL.Services
 
             if (application == null)
             {
-                return Result.Fail(ApplicationError.DoesntExist);
+                return Result.Fail(Validations.Result.Errors.ApplicationDoesntExist);
             }
 
-            var app = new ApplicationSubmitDto()
+            if (string.IsNullOrEmpty(application.Name)
+                || string.IsNullOrEmpty(application.Outline))
             {
-                Name = application.Name,
-                Description = application.Description,
-                Outline = application.Outline
-            };
-
-            var validationResult = await _validatorSubmit.ValidateAsync(app, cancellationToken);
-
-            if (!validationResult.IsValid)
-            {
-                return Result.Fail(validationResult.Errors.Select(failure => failure.ErrorMessage));
+                return Result.Fail(Validations.Result.Errors.MustBeFilledIn);
             }
 
             if ( application.Status is ApplicationStatus.Active )
             {
-                return Result.Fail(ApplicationError.CantUpdateActive);
+                return Result.Fail(Validations.Result.Errors.CantUpdateActive);
             }
 
             application.Status = ApplicationStatus.Active;
@@ -225,12 +214,12 @@ namespace CallForPappersService_BAL.Services
 
             if (application == null)
             {
-                return Result.Fail(ApplicationError.DoesntExist);
+                return Result.Fail(Validations.Result.Errors.ApplicationDoesntExist);
             }
 
             if (application.Status == ApplicationStatus.Active)
             {
-                return Result.Fail(ApplicationError.CantDeleteActive);
+                return Result.Fail(Validations.Result.Errors.CantDeleteActive);
             }
             
             await _applicationRepository.DeleteApplicationAsync(application, cancellationToken);

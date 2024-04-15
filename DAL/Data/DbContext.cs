@@ -24,11 +24,11 @@ namespace CallForPappersService_DAL.Data
             modelBuilder.Entity<Activity>().HasKey(x => x.Type);
 
             modelBuilder.Entity<Application>()
-                .Property(x => x.Name).HasMaxLength(100).IsRequired();
+                .Property(x => x.Name).HasMaxLength(100);
             modelBuilder.Entity<Application>()
                 .Property(x => x.Description).HasMaxLength(300);
             modelBuilder.Entity<Application>()
-                .Property(x => x.Outline).HasMaxLength(1000).IsRequired();
+                .Property(x => x.Outline).HasMaxLength(1000);
             modelBuilder.Entity<Application>()
                 .Property(x => x.AuthorId).IsRequired();
         }

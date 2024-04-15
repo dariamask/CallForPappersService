@@ -73,12 +73,10 @@ namespace CallForPappersService_DAL.Migrations
                         .HasColumnType("character varying(300)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
                     b.Property<string>("Outline")
-                        .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("character varying(1000)");
 

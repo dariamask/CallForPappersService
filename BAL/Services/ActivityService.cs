@@ -1,5 +1,4 @@
 ﻿using CallForPappersService_BAL.Dto;
-using CallForPappersService_DAL;
 using CallForPappersService_DAL.Repository;
 using FluentResults;
 

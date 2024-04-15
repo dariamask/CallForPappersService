@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
+﻿
 namespace CallForPappersService_DAL.Data.Entities
 {
     public class Application

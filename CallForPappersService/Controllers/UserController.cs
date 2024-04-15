@@ -2,7 +2,6 @@
 using CallForPappersService_BAL.Services;
 using FluentResults.Extensions.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
-using System.Runtime.CompilerServices;
 
 namespace CallForPappersService_PL.Controllers
 {
@@ -18,6 +17,7 @@ namespace CallForPappersService_PL.Controllers
 
         [HttpGet("{userId}/currentapplication")]
         [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
         public async Task<ActionResult<ApplicationDto>> GetUnsubmittedApplication(Guid userId, CancellationToken cancellationToken)
         {
             var result = await _applicationService.GetUnsubmittedApplicationAsync(userId, cancellationToken);

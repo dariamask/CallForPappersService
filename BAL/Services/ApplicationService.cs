@@ -11,17 +11,14 @@ namespace CallForPappersService_BAL.Services
     public class ApplicationService : IApplicationService
     {
         private readonly IApplicationRepository _applicationRepository;
-        private readonly IActivityRepository _activityRepository;
         private readonly IValidator<ApplicationCreateDto> _validatorCreate;
         private readonly IValidator<ApplicationUpdateDto> _validatorUpdate;
 
         public ApplicationService(IApplicationRepository applicationRepository, 
-            IActivityRepository activityRepository, 
             IValidator<ApplicationCreateDto> validatorCreate,
             IValidator<ApplicationUpdateDto> validatorUpdate)
         {
             _applicationRepository = applicationRepository;
-            _activityRepository = activityRepository;
             _validatorCreate = validatorCreate;
             _validatorUpdate = validatorUpdate;
         }

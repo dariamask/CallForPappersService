@@ -1,6 +1,4 @@
-﻿
-
-using CallForPappersService_BAL.Dto;
+﻿using CallForPappersService_BAL.Dto;
 using FluentResults;
 
 namespace CallForPappersService_BAL.Services

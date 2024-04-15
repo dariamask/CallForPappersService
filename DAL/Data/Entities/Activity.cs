@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
-
-namespace CallForPappersService_DAL.Data.Entities
+﻿namespace CallForPappersService_DAL.Data.Entities
 {
     public class Activity
     {

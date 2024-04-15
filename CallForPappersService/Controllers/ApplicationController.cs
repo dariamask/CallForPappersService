@@ -2,7 +2,6 @@
 using CallForPappersService_BAL.Services;
 using CallForPappersService_BAL.Dto;
 using FluentResults.Extensions.AspNetCore;
-using Microsoft.Net.Http.Headers;
 using FluentResults;
 
 namespace CallForPappersService_PL.Controllers
@@ -30,6 +29,7 @@ namespace CallForPappersService_PL.Controllers
 
         [HttpGet("{applicationId}")]
         [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
         public async Task<ActionResult<ApplicationDto>> GetApplication(Guid applicationId, CancellationToken cancellationToken)
         {
             var result = await _applicationService.GetApplicationAsync(applicationId, cancellationToken);
@@ -40,6 +40,7 @@ namespace CallForPappersService_PL.Controllers
 
         [HttpGet]
         [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
         public async Task<ActionResult<List<ApplicationDto>>> GetApplication(
             [FromQuery] DateTime? submittedAfter, 
             [FromQuery] DateTime? unsubmittedOlder, 
@@ -57,9 +58,8 @@ namespace CallForPappersService_PL.Controllers
         }
 
         [HttpPut("{applicationId}")]
-        [ProducesResponseType(400)]
         [ProducesResponseType(200)]
-        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
         public async Task<ActionResult<ApplicationDto>> UpdateApplication(Guid applicationId, 
             [FromBody] ApplicationUpdateDto applicationUpdateDto, CancellationToken cancellationToken)
         {
@@ -69,7 +69,7 @@ namespace CallForPappersService_PL.Controllers
         }
 
         [HttpPost("{applicationId}/submit")]
-        [ProducesResponseType(204)]
+        [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         public async Task<ActionResult> SubmitApplication(Guid applicationId, CancellationToken cancellationToken)
         {
@@ -79,9 +79,8 @@ namespace CallForPappersService_PL.Controllers
         }
 
         [HttpDelete("{applicationId}")]
+        [ProducesResponseType(200)]
         [ProducesResponseType(400)]
-        [ProducesResponseType(204)]
-        [ProducesResponseType(404)]
         public async Task<ActionResult> DeleteApplication(Guid applicationId, CancellationToken cancellationToken)
         {
             var result = await _applicationService.DeleteAplicationAsync(applicationId, cancellationToken);

@@ -7,6 +7,21 @@ Entity Framework Core, Postgresql, Npgsql.
 1. В файле appsettings.json необходимо поменять строку подключения к базе данных.
 2. Запустить проект.
 
+UPD: 
+В BAL\Services\ApplicationService.cs
+прошу заменить строки 162-164
+
+            application.Name = updatedApplication.Name ?? application.Name;
+            application.Description = updatedApplication.Description ?? application.Description;
+            application.Outline = updatedApplication.Outline ?? application.Outline;
+            application.ActivityType = updatedApplication.ActvityTypeName;
+На
+            application.Name = updatedApplication.Name;
+            application.Description = updatedApplication.Description;
+            application.Outline = updatedApplication.Outline;
+
+Поняла условия корректно только за несколько часов до делайна (будет урок, что надо задавать больше уточняющих вопросов).
+Из-за спешки пропустла этот момент в сервисе. Большое спасибо!
 
 Согласно полученным правкам, были внесены изменения:
 

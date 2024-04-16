@@ -16,9 +16,11 @@ UPD:
             application.Outline = updatedApplication.Outline ?? application.Outline;
             application.ActivityType = updatedApplication.ActvityTypeName;
 На
+
             application.Name = updatedApplication.Name;
             application.Description = updatedApplication.Description;
             application.Outline = updatedApplication.Outline;
+            
 
 Поняла условия корректно только за несколько часов до делайна (будет урок, что надо задавать больше уточняющих вопросов).
 Из-за спешки пропустла этот момент в сервисе. Большое спасибо!

@@ -47,6 +47,7 @@ namespace CallForPappersService_PL
             }
 
             app.UseMiddleware<CancellationHandlingMiddleware>();
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
 
             if (app.Environment.IsDevelopment())
             {

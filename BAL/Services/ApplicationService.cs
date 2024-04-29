@@ -4,6 +4,7 @@ using CallForPappersService_DAL.Repository;
 using CallForPappersService_BAL.Validations.Result;
 using CallForPappersService_BAL.Dto;
 using FluentResults;
+using CallForPappersService_BAL.Mapper;
 
 
 namespace CallForPappersService_BAL.Services
@@ -51,15 +52,7 @@ namespace CallForPappersService_BAL.Services
             
             await _applicationRepository.CreateApplicationAsync(application, cancellationToken);
 
-            return new ApplicationDto()
-            {
-                Id = application.Id,
-                AuthorId = application.AuthorId,
-                ActvityTypeName = application.ActivityType,          
-                Name = application.Name,
-                Description = application.Description,
-                Outline = application.Outline,
-            };
+            return application.MapToResponse();
         }
 
         public async Task<Result<ApplicationDto>> GetApplicationAsync(Guid applicationId, CancellationToken cancellationToken)
@@ -71,45 +64,21 @@ namespace CallForPappersService_BAL.Services
                 return Result.Fail(Validations.Result.Errors.ApplicationDoesntExist);
             }
 
-            return new ApplicationDto()
-            {
-                Id = application.Id,
-                AuthorId = application.AuthorId,
-                ActvityTypeName = application.Activity.Type,
-                Name = application.Name,
-                Description = application.Description,
-                Outline = application.Outline,
-            };
+            return application.MapToResponse();
         }
 
         public async Task<Result<List<ApplicationDto>>> GetUnsubmittedApplicationOlderDateAsync(DateTime? unsubmittedOlder, CancellationToken cancellationToken)
         {
             var applications = await _applicationRepository.GetUnsubmittedApplicationOlderDateAsync(unsubmittedOlder, cancellationToken);
 
-            return applications.Select(x => new ApplicationDto
-            {
-                Id = x.Id,
-                AuthorId = x.AuthorId,
-                ActvityTypeName = x.Activity.Type,
-                Name = x.Name,
-                Description = x.Description,
-                Outline = x.Outline,
-            }).ToList();
+            return applications.MapToResponse();
         }
 
         public async Task<Result<List<ApplicationDto>>> GetApplicationsSubmittedAfterDateAsync(DateTime? submittedAfter, CancellationToken cancellationToken)
         {
             var applications = await _applicationRepository.GetApplicationsSubmittedAfterDateAsync(submittedAfter, cancellationToken);
 
-            return applications.Select(x => new ApplicationDto
-            {
-                Id = x.Id,
-                AuthorId = x.AuthorId,
-                ActvityTypeName = x.Activity.Type,
-                Name = x.Name,
-                Description = x.Description,
-                Outline = x.Outline,
-            }).ToList();
+            return applications.MapToResponse();
         }
 
         public async Task<Result<ApplicationDto>> GetUnsubmittedApplicationAsync(Guid authorId, CancellationToken cancellationToken)
@@ -126,15 +95,7 @@ namespace CallForPappersService_BAL.Services
             }
             else
             {
-                return new ApplicationDto()
-                {
-                    Id = application.Id,
-                    AuthorId = application.AuthorId,
-                    ActvityTypeName = application.Activity.Type,
-                    Name = application.Name,
-                    Description = application.Description,
-                    Outline = application.Outline,
-                };
+                return application.MapToResponse();
             }
         }
 
@@ -166,15 +127,7 @@ namespace CallForPappersService_BAL.Services
 
             await _applicationRepository.UpdateApplicationAsync(application, cancellationToken);
 
-            return new ApplicationDto
-            {
-                Id = application.Id,
-                AuthorId = application.AuthorId,
-                ActvityTypeName = application.ActivityType,
-                Name = application.Name,
-                Description = application.Description,
-                Outline = application.Outline,
-            };
+            return application.MapToResponse();
         }
 
         public async Task<Result> SubmitApplicationAsync(Guid applicationId, CancellationToken cancellationToken)

@@ -5,6 +5,7 @@ namespace CallForPappersService_PL.Middlware
     public class ExceptionHandlingMiddleware
     {
         private readonly RequestDelegate _requestDelegate;
+
         private readonly ILogger<ExceptionHandlingMiddleware> _logger;
         public ExceptionHandlingMiddleware(
             RequestDelegate requestDelegate, 
@@ -22,7 +23,7 @@ namespace CallForPappersService_PL.Middlware
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Exception occured: {ex.Message}");
+                _logger.LogError(ex, "Error occured: {ErrorMessage}", ex.Message);
 
                 var problemDetails = new ProblemDetails
                 {

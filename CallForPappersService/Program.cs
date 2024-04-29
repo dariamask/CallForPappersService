@@ -9,6 +9,7 @@ using System.Text.Json.Serialization;
 using CallForPappersService_DAL.Data;
 using CallForPappersService_BAL.Dto;
 using CallForPappersService_DAL.Data.Entities;
+using Serilog;
 
 namespace CallForPappersService_PL
 {
@@ -38,6 +39,17 @@ namespace CallForPappersService_PL
             builder.Services.AddScoped<IValidator<ApplicationCreateDto>, ApplicationCreateDtoValidator>();
             builder.Services.AddScoped<IValidator<ApplicationUpdateDto>, ApplicationUpdateDtoValidator>();
 
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json")
+                .Build();
+
+            var logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(configuration)
+                .CreateLogger();
+
+            builder.Services.AddSerilog(logger);
+
             var app = builder.Build();
 
             using (var scope = app.Services.CreateScope())
@@ -58,7 +70,6 @@ namespace CallForPappersService_PL
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
 
             app.MapControllers();
 

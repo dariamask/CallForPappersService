@@ -19,9 +19,9 @@ namespace CallForPappersService_PL.Controllers
         [HttpPost]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult<ApplicationDto>> Create([FromBody] ApplicationCreateDto applicationCreateDto, CancellationToken cancellationToken)
+        public async Task<ActionResult<ApplicationDto>> Create([FromBody] ApplicationCreateDto request, CancellationToken cancellationToken)
         {
-            var result = await _applicationService.CreateApplicationAsync(applicationCreateDto, cancellationToken);
+            var result = await _applicationService.CreateApplicationAsync(request, cancellationToken);
 
             return result.ToActionResult();
         }
@@ -42,16 +42,15 @@ namespace CallForPappersService_PL.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         public async Task<ActionResult<List<ApplicationDto>>> GetApplication(
-            [FromQuery] DateTime? submittedAfter, 
-            [FromQuery] DateTime? unsubmittedOlder, 
+            [FromQuery] ApplicationGetDto request,
             CancellationToken cancellationToken)
         {
-            Result<List<ApplicationDto>> result = (submittedAfter, unsubmittedOlder) switch
+            var result = request switch
             {
-                (null, { } submittedOlder) => await _applicationService.GetUnsubmittedApplicationOlderDateAsync(unsubmittedOlder, cancellationToken),
-                ({ } sumittedAfter, null) => await _applicationService.GetApplicationsSubmittedAfterDateAsync(submittedAfter, cancellationToken),
-                ({ } sumittedAfter, { } submittedOlder) => new Error ("Only one parametr must be filled in"),
-                _ => new Error("One field must be filled in")
+                { SubmittedAfter: not null} and { UnsubmittedOlder: not null} => new Error ("Only one parametr must be set"),
+                { SubmittedAfter: not null } => await _applicationService.GetApplicationsSubmittedAfterDateAsync(request.SubmittedAfter, cancellationToken),
+                { UnsubmittedOlder: not null} => await _applicationService.GetUnsubmittedApplicationOlderDateAsync(request.UnsubmittedOlder, cancellationToken),
+                _ => new Error("One field must be set")
             };
 
             return result.ToActionResult();
@@ -61,9 +60,9 @@ namespace CallForPappersService_PL.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         public async Task<ActionResult<ApplicationDto>> UpdateApplication(Guid applicationId, 
-            [FromBody] ApplicationUpdateDto applicationUpdateDto, CancellationToken cancellationToken)
+            [FromBody] ApplicationUpdateDto request, CancellationToken cancellationToken)
         {
-            var result = await _applicationService.UpdateApplicationAsync(applicationId, applicationUpdateDto, cancellationToken);
+            var result = await _applicationService.UpdateApplicationAsync(applicationId, request, cancellationToken);
             
             return result.ToActionResult();
         }

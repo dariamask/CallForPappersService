@@ -58,7 +58,6 @@ namespace CallForPappersService_PL
                 db.Database.Migrate();
             }
 
-            app.UseMiddleware<CancellationHandlingMiddleware>();
             app.UseMiddleware<ExceptionHandlingMiddleware>();
 
             if (app.Environment.IsDevelopment())

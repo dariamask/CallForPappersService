@@ -1,8 +1,6 @@
 ﻿using CallForPappersService_DAL.Data;
 using CallForPappersService_DAL.Data.Entities;
-
 using Microsoft.EntityFrameworkCore;
-using System;
 
 namespace CallForPappersService_DAL.Repository
 {

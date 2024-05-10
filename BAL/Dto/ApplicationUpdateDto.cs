@@ -1,6 +1,4 @@
-﻿
-using CallForPappersService_DAL.Data.Entities;
-using System.Text.Json.Serialization;
+﻿using CallForPappersService_DAL.Data.Entities;
 
 namespace CallForPappersService_BAL.Dto
 {

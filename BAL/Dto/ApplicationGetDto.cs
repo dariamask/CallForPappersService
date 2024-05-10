@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CallForPappersService_BAL.Dto
+﻿namespace CallForPappersService_BAL.Dto
 {
     public class ApplicationGetDto
     {

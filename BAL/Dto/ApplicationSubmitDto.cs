@@ -1,5 +1,4 @@
-﻿
-namespace CallForPappersService_BAL.Dto
+﻿namespace CallForPappersService_BAL.Dto
 {
     public class ApplicationSubmitDto
     {

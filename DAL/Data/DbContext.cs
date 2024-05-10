@@ -1,6 +1,5 @@
 ﻿using CallForPappersService_DAL.Data.Entities;
 using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
 
 namespace CallForPappersService_DAL.Data
 {

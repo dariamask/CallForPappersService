@@ -1,9 +1,5 @@
-﻿
-using CallForPappersService_BAL.Dto;
-using CallForPappersService_DAL.Data.Entities;
+﻿using CallForPappersService_BAL.Dto;
 using FluentValidation;
-using System.Data;
-using System.Text.Json.Serialization;
 
 namespace CallForPappersService_BAL.Validations
 {

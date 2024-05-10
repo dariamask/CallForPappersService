@@ -1,6 +1,4 @@
-﻿using FluentResults;
-
-namespace CallForPappersService_BAL.Validations.Result
+﻿namespace CallForPappersService_BAL.Validations.Result
 {
     public class Errors
     {

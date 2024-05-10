@@ -2,7 +2,6 @@
 using CallForPappersService_BAL.Services;
 using CallForPappersService_BAL.Dto;
 using FluentResults.Extensions.AspNetCore;
-using Serilog;
 
 namespace CallForPappersService_PL.Controllers
 {

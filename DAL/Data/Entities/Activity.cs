@@ -9,8 +9,8 @@
 
     public enum ActivityType
     { 
-        Report = 0,
-        MasterClass = 1,
-        Discussion = 2,
+        Report = 1,
+        MasterClass = 2,
+        Discussion = 3,
     }
 }

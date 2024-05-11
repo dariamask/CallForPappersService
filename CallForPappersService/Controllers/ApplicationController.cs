@@ -1,15 +1,16 @@
-﻿using CallForPappersService.Data.Dto;
-using Microsoft.AspNetCore.Mvc;
-using CallForPappersService.Services;
-using System.Threading;
+﻿using Microsoft.AspNetCore.Mvc;
+using CallForPappersService_BAL.Services;
+using CallForPappersService_BAL.Dto;
+using FluentResults.Extensions.AspNetCore;
+using FluentResults;
 
-namespace CallForPappersService.Controllers
+namespace CallForPappersService_PL.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("applications")]
     [ApiController]
     public class ApplicationController : Controller
     {
-        private readonly IApplicationService _applicationService;    
+        private readonly IApplicationService _applicationService;
         public ApplicationController(IApplicationService applicationService)
         {
             _applicationService = applicationService;
@@ -18,81 +19,72 @@ namespace CallForPappersService.Controllers
         [HttpPost]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult<ApplicationDto>> Create([FromBody] ApplicationCreateDto applicationCreateDto, CancellationToken cancellationToken = default)
+        public async Task<ActionResult<ApplicationDto>> Create([FromBody] ApplicationCreateDto request, CancellationToken cancellationToken)
         {
-            var application = await _applicationService.CreateApplicationAsync(applicationCreateDto, cancellationToken);
-            return application == null ? BadRequest("Something went wrong") : Ok(application);
+            var result = await _applicationService.CreateApplicationAsync(request, cancellationToken);
+
+            return result.ToActionResult();
         }
 
 
         [HttpGet("{applicationId}")]
         [ProducesResponseType(200)]
-        public async Task<ActionResult<ApplicationDto>> GetApplication(Guid applicationId)
+        [ProducesResponseType(400)]
+        public async Task<ActionResult<ApplicationDto>> GetApplication(Guid applicationId, CancellationToken cancellationToken)
         {
-            return await _applicationService.GetApplicationAsync(applicationId);
+            var result = await _applicationService.GetApplicationAsync(applicationId, cancellationToken);
+
+            return result.ToActionResult();
         }
 
 
         [HttpGet]
         [ProducesResponseType(200)]
-        public async Task<ActionResult<List<ApplicationDto>>> GetApplication([FromQuery] DateTime? submittedAfter, [FromQuery] DateTime? unsubmittedOlder)
+        [ProducesResponseType(400)]
+        public async Task<ActionResult<List<ApplicationDto>>> GetApplication(
+            [FromQuery] ApplicationGetDto request,
+            CancellationToken cancellationToken)
         {
-            if (unsubmittedOlder == null && submittedAfter != null)
+            var result = request switch
             {
-                return await _applicationService.GetApplicationsSubmittedAfterDateAsync(submittedAfter);
-            }
-            else if (submittedAfter == null && unsubmittedOlder != null)
-            {
-                return await _applicationService.GetUnsubmittedApplicationOlderDateAsync(unsubmittedOlder);
-            }
-            else
-            {
-                return BadRequest("Invalid combination of parametrs");
-            }
-        }
+                { SubmittedAfter: not null} and { UnsubmittedOlder: not null} => new Error ("Only one parametr must be set"),
+                { SubmittedAfter: not null } => await _applicationService.GetApplicationsSubmittedAfterDateAsync(request.SubmittedAfter, cancellationToken),
+                { UnsubmittedOlder: not null} => await _applicationService.GetUnsubmittedApplicationOlderDateAsync(request.UnsubmittedOlder, cancellationToken),
+                _ => new Error("One field must be set")
+            };
 
-
-        [HttpGet("~/users/{applicationId}")]
-        [ProducesResponseType(200)]
-        public async Task<ActionResult<ApplicationDto>> GetUnsubmittedApplication(Guid applicationId)
-        {          
-            var dto = await _applicationService.GetUnsubmittedApplicationAsync(applicationId);
-
-            if (dto == null)
-            {
-                return BadRequest("Application status is active or it doesn't exists");
-            }
-
-            return Ok(dto);
+            return result.ToActionResult();
         }
 
         [HttpPut("{applicationId}")]
-        [ProducesResponseType(400)]
         [ProducesResponseType(200)]
-        [ProducesResponseType(404)]
-        public async Task<ActionResult<ApplicationDto>> UpdateApplication(Guid applicationId, [FromBody] ApplicationUpdateDto updatedApplication)
-        {            
-            var application = await _applicationService.UpdateApplicationAsync(applicationId, updatedApplication);
-            return application == null ? BadRequest("Something went wrong") : Ok(application);
+        [ProducesResponseType(400)]
+        public async Task<ActionResult<ApplicationDto>> UpdateApplication(Guid applicationId, 
+            [FromBody] ApplicationUpdateDto request, CancellationToken cancellationToken)
+        {
+            var result = await _applicationService.UpdateApplicationAsync(applicationId, request, cancellationToken);
+            
+            return result.ToActionResult();
         }
 
         [HttpPost("{applicationId}/submit")]
-        [ProducesResponseType(204)]
+        [ProducesResponseType(200)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult> SubmitApplication(Guid applicationId)
+        public async Task<ActionResult> SubmitApplication(Guid applicationId, CancellationToken cancellationToken)
         {
-            var result = await _applicationService.SubmitApplicationAsync(applicationId);
-            return result ? Ok("Success") : BadRequest("Something went wrong with submitting");
+            var result = await _applicationService.SubmitApplicationAsync(applicationId, cancellationToken);
+
+            return result.ToActionResult();
         }
 
         [HttpDelete("{applicationId}")]
+        [ProducesResponseType(200)]
         [ProducesResponseType(400)]
-        [ProducesResponseType(204)]
-        [ProducesResponseType(404)]
-        public async Task<ActionResult> DeleteApplication(Guid applicationId)
+        public async Task<ActionResult> DeleteApplication(Guid applicationId, CancellationToken cancellationToken)
         {
-            var result = await _applicationService.DeleteAplicationAsync(applicationId);
-            return result ? Ok("Success") : BadRequest("Something went wrong");         
+            var result = await _applicationService.DeleteAplicationAsync(applicationId, cancellationToken);
+
+            return result.ToActionResult();
         }
     }
 }

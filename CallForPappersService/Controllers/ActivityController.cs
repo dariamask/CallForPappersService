@@ -1,26 +1,34 @@
-﻿using CallForPappersService.Data;
-using CallForPappersService.Data.Entities;
-using CallForPappersService.Data.Dto;
-using Microsoft.AspNetCore.Mvc;
-using CallForPappersService.Services;
+﻿using Microsoft.AspNetCore.Mvc;
+using CallForPappersService_BAL.Services;
+using CallForPappersService_BAL.Dto;
+using FluentResults.Extensions.AspNetCore;
 
-namespace CallForPappersService.Controllers
+namespace CallForPappersService_PL.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("activities")]
     [ApiController]
     public class ActivityController : Controller
     {
         private readonly IActivityService _activityService;
-        public ActivityController(IActivityService activityService)
+        private readonly ILogger<ActivityController> _logger;
+        public ActivityController(
+            IActivityService activityService, 
+            ILogger<ActivityController> logger)
         {
             _activityService = activityService;
+            _logger = logger;
         }
 
         [HttpGet]
         [ProducesResponseType(200)]
-        public async Task<ActionResult<List<ActivityDto>>> GetActivitiesAsync()
+        [ProducesResponseType(400)]
+        public async Task<ActionResult<List<ActivityDto>>> GetActivitiesAsync(CancellationToken cancellationToken)
         {
-            return await _activityService.GetActivitiesAsync();
+            //loggerTesting
+            _logger.LogCritical("Oh my God, they killed Kenny!");
+            _logger.LogWarning("You bastards!");
+            var result = await _activityService.GetActivitiesAsync(cancellationToken);
+            return result.ToActionResult();
         }
     }
 }

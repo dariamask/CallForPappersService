@@ -8,129 +8,228 @@ Entity Framework Core, Postgresql, Npgsql.
 
 POST /applications
 {
+
 	author: "ddfea950-d878-4bfe-a5d7-e9771e830cbd",
-	activity: "Report",
+
+	type: "Report",
+
 	name: "Новые фичи C# vNext",
+
 	description: "Расскажу что нас ждет в новом релизе!",
+
 	outline: "очень много текста... прямо детальный план доклада!",
+
 }
+
 ===>
+
 {
-	id: "9c53ea53-a88d-4367-ad8a-281738690412",
+
+	id: "ddfea950-d878-4bfe-a5d7-e9771e830cbd",
+
 	author: "ddfea950-d878-4bfe-a5d7-e9771e830cbd",
+
 	activity: "Report",
+
 	name: "Новые фичи C# vNext",
+
 	description: "Расскажу что нас ждет в новом релизе!",
+
 	outline: "очень много текста... прямо детальный план доклада!",
+
 }
 
 - редактирование заявки:
 
 PUT /applications/9c53ea53-a88d-4367-ad8a-281738690412
+
 {
+
 	activity: "Report",
+
 	name: "Новые фичи C# theNextGeneratin",
+
 	description: "Расскажу что нас ждет в новейшем релизе!",
+
 	outline: "еще больше текста...",
+
 }
+
 ===>
+
 {
+
 	id: "9c53ea53-a88d-4367-ad8a-281738690412",
+
 	author: "ddfea950-d878-4bfe-a5d7-e9771e830cbd",
+
 	activity: "Report",
+
 	name: "Новые фичи C# theNextGeneratin",
+
 	description: "Расскажу что нас ждет в новейшем релизе!",
+
 	outline: "еще больше текста...",
+
 }
+
 
 - удаление заявки:
 
 DELETE /applications/9c53ea53-a88d-4367-ad8a-281738690412
+
 ==>
+
 OK, 200
+
 
 - отправка заявки на рассмотрение программным комитетом:
 
 POST /applications/9c53ea53-a88d-4367-ad8a-281738690412/submit
+
 ==>
+
 OK, 200
+
 
 - получение заявок поданных после указанной даты:
 
 GET /applications?submittedAfter="2024-01-01 23:00:00.00"
+
 ==>
+
 [
+
 	{
+
 		id: "9c53ea53-a88d-4367-ad8a-281738690412",
+
 		author: "ddfea950-d878-4bfe-a5d7-e9771e830cbd",
+
 		activity: "Report",
+
 		name: "Новые фичи C# theNextGeneratin",
+
 		description: "Расскажу что нас ждет в новейшем релизе!",
+
 		outline: "очень много текста...",
+
 	},
+
 	...
+
 ]
+
 
 - получение заявок не поданных и старше определенной даты:
 
 GET /applications?unsubmittedOlder="2024-01-01 23:00:00.00"
+
 ==>
+
 [
+
 	{
+
 		id: "9c53ea53-a88d-4367-ad8a-281738690412",
+
 		author: "ddfea950-d878-4bfe-a5d7-e9771e830cbd",
+
 		activity: "Report",
+
 		name: "Новые фичи C# theNextGeneratin",
+
 		description: "Расскажу что нас ждет в новейшем релизе!",
+
 		outline: "очень много текста...",
+
 	},
+
 	...
+
 ]
+
 
 - получение текущей не поданной заявки для указанного пользователя:
 
 GET /users/ddfea950-d878-4bfe-a5d7-e9771e830cbd/currentapplication
+
 ==>
+
 {
+
 	id: "9c53ea53-a88d-4367-ad8a-281738690412",
+
 	author: "ddfea950-d878-4bfe-a5d7-e9771e830cbd",
+
 	activity: "Report",
+
 	name: "Новые фичи C# theNextGeneratin",
+
 	description: "Расскажу что нас ждет в новейшем релизе!",
+
 	outline: "очень много текста...",
+
 }
+
 
 - получение заявки по идентификатору:
 
 GET /applications/9c53ea53-a88d-4367-ad8a-281738690412
+
 ==>
+
 {
+
 	id: "9c53ea53-a88d-4367-ad8a-281738690412",
+
 	author: "ddfea950-d878-4bfe-a5d7-e9771e830cbd",
+
 	activity: "Report",
+
 	name: "Новые фичи C# theNextGeneratin",
+
 	description: "Расскажу что нас ждет в новейшем релизе!",
+
 	outline: "очень много текста...",
+
 }
+
 
 - получение списка возможных типов активности:
 
 GET /activities
+
 ==>
+
 [
+
 	{ 
+
 		activity: "Report",
+
 		description: "Доклад, 35-45 минут"
+
 	},
+
 	{ 
+
 		activity: "Masterclass",
+
 		description: "Мастеркласс, 1-2 часа"
+
 	},
+
 	{ 
+
 		activity: "Discussion",
+
 		description: "Дискуссия / круглый стол, 40-50 минут"
+
 	}
+
 ]
+
 
 Критерии:
 - у пользователя может только одна не отправленная заявка (черновика заявки)
